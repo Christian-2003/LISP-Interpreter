@@ -285,6 +285,12 @@ inline void printError(CToken errorToken, short int pnErrorMessage) {
 	case Error::Interpreter::CANNOT_CONVERT_STRING_TO_CHAR:
 		cerr << "Cannot convert string to character." << endl;
 		break;
+	case Error::Interpreter::MISSING_CONDITION:
+		cerr << "Missing condition of statement." << endl;
+		break;
+	case Error::Interpreter::MISSING_BODY:
+		cerr << "Missing body of statement." << endl;
+		break;
 	default:
 		cerr << "Encountered unknown error." << endl;
 		break;
@@ -301,7 +307,7 @@ inline void printError(CToken errorToken, short int pnErrorMessage) {
 int main() {
 	SetTextColor(7);
 	cout << "==========================================================================================" << endl;
-	cout << "LispInterpreter 2021 Developer Command Promt v0.3" << endl;
+	cout << "LispInterpreter 2021 Developer Command Promt v0.4" << endl;
 	cout << "Made by ChosenChris" << endl;
 	cout << "==========================================================================================\n" << endl;
 	string sFilePath = ""; //Stores the filepath (Can be changed through cd).

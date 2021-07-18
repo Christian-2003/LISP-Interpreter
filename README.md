@@ -1,4 +1,4 @@
-# LISP Interpreter ![](https://img.shields.io/github/languages/code-size/ChosenChris/LISP-Interpreter) ![Generic badge](https://img.shields.io/badge/License-MIT-green.svg)
+# LISP Interpreter ![](https://img.shields.io/github/languages/code-size/ChosenChris/LISP-Interpreter) ![Generic badge](https://img.shields.io/badge/License-MIT-green.svg) ![](https://img.shields.io/github/manifest-json/v/ChosenChris/LISP-Interpreter?color=red)
 This LISP interpreter is an improved version of my old interpreter, which can be found [here](https://github.com/ChosenChris/LispInterpreter).
 
 Due to poorly implemented algorithms, I have decided to rebuild the interpreter in a better way, this time utilizing the mechanics and speed of the programming language C++.
@@ -23,7 +23,7 @@ This repository resembles an interpreter for a custom dialect of the programming
 
 An interpreter is a program which is capable of evaluating and executing sourcecode. Unlike a compiler, the interpreter does not create any executable file, so the source code must be interpreted every time one wants to execute it.
 
-Unlike you might thing, Lisp is no programming language, but rather a collection of multiple programming languages, which all have similar paradigms which makes them all feel more alike. The Lisp dialect, which this interpreter can evaluate is inspired by the much more common _STELLA_ dialect, but still different in many ways (and of course with a much smaller functional scope). For further information on my Lisp dialect, visit the [Lisp documentation](https://github.com/ChosenChris/LISP-Interpreter/tree/main/Lisp%20Documentation) of this repository.
+Unlike you might thing, Lisp is no programming language, but rather a collection of multiple programming languages, which all have similar paradigms which makes them all feel more alike. The Lisp dialect, which this interpreter can evaluate is inspired by the much more common _STELLA_ dialect, but still different in many ways (and of course with a much smaller functional scope). For further information on my Lisp dialect, visit the [Lisp documentation](https://github.com/ChosenChris/LISP-Interpreter/tree/main/Documentation/Lisp) of this repository.
 
 <br/>
 

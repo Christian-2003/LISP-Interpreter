@@ -717,34 +717,63 @@ private:
 				bCondition = true;
 			}
 		}
-		if (!bCondition) {
-			//Condition is false -> terminate function execution:
-			return CRV<CToken>(pAST.getContent(), Error::SUCCESS);
-		}
+		
+		CLinkedList<CVariable> lOldVariables; //Stores the variables before the if-statement.
+		lOldVariables.addAll(lVariables);
 
-		//Execute the functions inside the body:
+		//Check wether the if- or else-expressions should be executed:
 		if (!(lSubTrees.size() >= 2)) {
 			//Error no body found:
 			return CRV<CToken>(pAST.getContent(), Error::Interpreter::MISSING_BODY);
 		}
-
-		if (lSubTrees[1].getContent().getType() != Token::BRANCH) {
+		CLinkedList<CAbstractSyntaxTree<CToken>> ltBodyExpressions; //Stores the expressions of the if-statement's body.
+		CAbstractSyntaxTree<CToken> lBodyAST; //Stores the AST whose expressions should be executed.
+		if (!bCondition) {
+			//The condition is false -> execute else-body (if it exists):
+			if (!(lSubTrees.size() >= 3)) {
+				//There is no else body -> terminate the execution:
+				return CRV<CToken>(pAST.getContent(), Error::SUCCESS);
+			}
+			lBodyAST = lSubTrees[2];
+		}
+		else {
+			//The condition is true -> execute main-body:
+			lBodyAST = lSubTrees[1];
+		}
+		//Execute expressions:
+		if (lBodyAST.getContent().getType() != Token::BRANCH) {
 			//Only one expression is represented in the body:
-			return interpret(lSubTrees[1]); //Interpret the expression.
+			CRV<CToken> rvEval = interpret(lBodyAST); //Interpret the expression.
+			if (rvEval.getErrorMessage() != Error::SUCCESS) {
+				//An error occured:
+				return rvEval;
+			}
 		}
 		else {
 			//Multiple expressions need to be evaluated:
 			CLinkedList<CAbstractSyntaxTree<CToken>> ltBodyExpressions; //Stores the expressions of the if-statement's body.
-			ltBodyExpressions.addAll(lSubTrees[1].getSubTrees());
-			for (int i = 0; i < ltBodyExpressions.size(); i++) {
+			ltBodyExpressions.addAll(lBodyAST.getSubTrees());
+			for (unsigned int i = 0; i < ltBodyExpressions.size(); i++) {
 				CRV<CToken> rvEval = interpret(ltBodyExpressions[i]); //Execute expression.
 				if (rvEval.getErrorMessage() != Error::SUCCESS) {
 					//An error occured:
 					return rvEval;
 				}
 			}
-			//Every expression was successfully executed:
+			//Every expression was successfully executed -> Restore the old variables:
+			for (unsigned int i = 0; i < lOldVariables.size(); i++) {
+				for (unsigned int j = 0; j < lVariables.size(); j++) {
+					if (lOldVariables[i].getName() == lVariables[j].getName() && lOldVariables[i].getValue() != lVariables[j].getValue()) {
+						//Found identical variable with different value:
+						lOldVariables.remove(i); //Remove old variable.
+						lOldVariables.add(lVariables[j], i); //Add new variable.
+					}
+				}
+			}
+			lVariables.clear();
+			lVariables.addAll(lOldVariables); //Restore old variables.
 			return CRV<CToken>(pAST.getContent(), Error::SUCCESS);
 		}
+		return CRV<CToken>(pAST.getContent(), Error::SUCCESS); //Not necessary -> Just to remove MSVC compiler warning... \(^_^)/
 	}
 };
