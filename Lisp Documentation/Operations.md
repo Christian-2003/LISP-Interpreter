@@ -14,7 +14,7 @@ The implemented LISP dialect is capable of evaluating a variety of different ope
 
 ***
 
-# Arithmetic operations <a name="arithmetic"></a>
+# Arithmetic operations: <a name="arithmetic"></a>
 
 Arithmetic operations such as _7 + 15_ are translated into LISP through the [polish notation](https://en.wikipedia.org/wiki/Polish_notation) into `(+ 7 15)`. This LISP-expression consists of three atoms (`+`, `7` & `15`). Out of those elements, the first one resembles the operator, and the other elements make up the operands of the operation.
 <br/>
@@ -51,7 +51,7 @@ Operator | Usage | Compatible data types | Restrictions
 
 ***
 
-# Relational operations <a name="relational"></a>
+# Relational operations: <a name="relational"></a>
 
 Relational operations compare always two values. If the condition of the operator is considered to be _true_, the value `T` is returned. If the condition of the operator is considered to be _false_, the value `NIL` is returned.
 
@@ -73,7 +73,7 @@ Operator | Mathmatical symbol | Condition | Compatible data types | Restrictions
 
 ***
 
-# Boolean operations <a name="boolean"></a>
+# Boolean operations: <a name="boolean"></a>
 
 Boolean operations compares the state of the booleans that are passed.
 

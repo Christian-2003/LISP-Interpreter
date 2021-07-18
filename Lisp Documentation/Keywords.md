@@ -25,17 +25,24 @@ The following keywords can be used with the Lisp interpreter.
 <br/>
 These keywords are used in order to declare a new variable with the respective data type.
 
-[`set`]()
+[`set`](set)
 <br/>
 This keyword is used to change the content of any variable.
 
 <br/>
 
 ### Keywords for in- and output:
-[`print`](#set),
+[`print`](#print),
 [`println`](#print)
 <br/>
 These keywords are used in order to print any value to the terminal.
+
+<br/>
+
+### Control structures:
+[`if`](#if)
+<br/>
+This keyword indicates an if-statement.
 
 <br/>
 <br/>
@@ -103,6 +110,8 @@ In case a variable does not get initialized during it's declaration, a standard 
 <br/>
 <br/>
 
+***
+
 ## `set`: <a name ="set"></a>
 
 ### Remarks:
@@ -135,6 +144,8 @@ The new value, for the variable. Please note that the new value has to be of the
 <br/>
 <br/>
 
+***
+
 ## `print`, `println`: <a name ="print"></a>
 
 ### Remarks:
@@ -145,7 +156,7 @@ These keywords are used to print values to the console. The difference between t
 ### Arguments:
 _content_
 <br>
-The keyword will print every element which is in it's list.
+Every upcoming element in the same list as the keyword will be printed ton the terminal.
 
 <br/>
 
@@ -160,4 +171,42 @@ The keyword will print every element which is in it's list.
 ### Output:
 ```
 2 + 5 = 7
+```
+
+<br/>
+<br/>
+<br/>
+
+***
+
+## `if`: <a name="if"> </a>
+
+### Remarks:
+This keyword indicates an if-statement, which is used to change the path that your program is following during it's execution. Further information on the if-statement can be found [here](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Lisp%20Documentation/Control%20Structures.md#if).
+
+<br/>
+
+### Arguments:
+_condition_
+<br/>
+The condition states wether the expressions in the _body_ will be executed. If the condition is `t`, the expressions will be executed, if it's `nil`, the expressions will not be executed.
+
+_body_
+<br/>
+A list with every expression, that should be executed when the condition is `t`.
+
+<br/>
+
+### Example:
+```Lisp
+(if (= 5 5) (
+    (println "5 is equal to 5:")
+    (println "The condition is true.")
+))
+```
+
+### Output:
+```
+5 is equal to 5:
+The condition is true.
 ```

@@ -622,6 +622,11 @@ private:
 			return CRV<CToken>(headNode, Error::SUCCESS);
 		}	
 		
+		else if (headNode.getLexeme() == Keyword::IF) {
+			//Evaluate if-statement:
+			return ifStatement(pAST);
+		}
+
 		else {
 			//Found invalid keyword:
 			return CRV<CToken>(headNode, Error::Interpreter::INCORRECT_TOKEN);
@@ -633,6 +638,9 @@ private:
 	/**
 	* This function is used to evaluate an identifier.
 	* The headnode of this AST must resemble the identifier.
+	* 
+	* @param pAST	Abstract syntax tree, which represents the identifier.
+	* @return		Error message including content.
 	*/
 	CRV<CToken> evaluateIdentifier(CAbstractSyntaxTree<CToken> pAST) {
 		if (pAST.hasSubTrees()) {
@@ -649,6 +657,94 @@ private:
 			}
 			//Variable was successfully returned:
 			return CRV<CToken>(CToken(rvVariable.getContent().getValue(), rvVariable.getContent().getType(), pAST.getContent().getFilename(), pAST.getContent().getLine()), Error::SUCCESS);
+		}
+	}
+	
+
+
+private:
+	/**
+	* This function is used to evaluate an if-statement.
+	* The headnode of the passed AST must resemble the if-keyword.
+	* 
+	* @param pAST	Abstract syntax tree, which resembles the if-statement
+	* @return		Error message and token, which caused the error.
+	*/
+	CRV<CToken> ifStatement(CAbstractSyntaxTree<CToken> pAST) {
+		if (pAST.getContent().getLexeme() != Keyword::IF) {
+			//Error: Incorrect token found:
+			return CRV<CToken>(pAST.getContent(), Error::Interpreter::INCORRECT_TOKEN);
+		}
+		else if (!pAST.hasSubTrees()) {
+			//Error: The AST does not have any subtrees:
+			return CRV<CToken>(pAST.getContent(), Error::Interpreter::EMPTY_AST_I);
+		}
+
+		CLinkedList<CAbstractSyntaxTree<CToken>> lSubTrees; //Stores the subtrees of the passed AST.
+		lSubTrees.addAll(pAST.getSubTrees());
+		if (!(lSubTrees.size() >= 1)) {
+			//Error: AST does not contain a condition:
+			return CRV<CToken>(pAST.getContent(), Error::Interpreter::MISSING_CONDITION);
+		}
+		CAbstractSyntaxTree<CToken> tCondition = lSubTrees[0]; //Stores the condition of the AST.
+		bool bCondition = false; //Stores wether the statement's condition is true or false.
+		if (tCondition.hasSubTrees()) {
+			//Further evaluation of the condition needed:
+			CRV<CToken> rvEval = interpret(tCondition);
+			if (rvEval.getErrorMessage() != Error::SUCCESS) {
+				//An error occured:
+				return rvEval;
+			}
+			CToken condToken = rvEval.getContent(); //Stores the returned token, which stores the boolean for the condition.
+			if (condToken.getType() != Token::U_BOOL || (condToken.getType() == Token::U_INT && (stoi(condToken.getLexeme()) != 1 || stoi(condToken.getLexeme()) != 0)) || (condToken.getType() == Token::U_DOUBLE && (stod(condToken.getLexeme()) != 1 || stod(condToken.getLexeme()) != 0))) {
+				//Error: Incorrect datatype encountered:
+				return CRV<CToken>(rvEval.getContent(), Error::produceConvertError(rvEval.getContent().getType(), Token::U_BOOL));
+			}
+			if ((condToken.getType() == Token::U_BOOL && condToken.getLexeme() == "t") || (condToken.getType() == Token::U_INT && stoi(condToken.getLexeme()) == 1) || (condToken.getType() == Token::U_DOUBLE && stod(condToken.getLexeme()) == 1)) {
+				//Condition is true:
+				bCondition = true;
+			}
+		}
+		else {
+			//No further evaluation needed:
+			CToken condToken = tCondition.getContent(); //Stores the returned token, which stores the boolean for the condition.
+			if (condToken.getType() != Token::U_BOOL || (condToken.getType() == Token::U_INT && (stoi(condToken.getLexeme()) != 1 || stoi(condToken.getLexeme()) != 0)) || (condToken.getType() == Token::U_DOUBLE && (stod(condToken.getLexeme()) != 1 || stod(condToken.getLexeme()) != 0))) {
+				//Error: Incorrect datatype encountered:
+				return CRV<CToken>(tCondition.getContent(), Error::produceConvertError(tCondition.getContent().getType(), Token::U_BOOL));
+			}
+			if ((condToken.getType() == Token::U_BOOL && condToken.getLexeme() == "t") || (condToken.getType() == Token::U_INT && stoi(condToken.getLexeme()) == 1) || (condToken.getType() == Token::U_DOUBLE && stod(condToken.getLexeme()) == 1)) {
+				//Condition is true:
+				bCondition = true;
+			}
+		}
+		if (!bCondition) {
+			//Condition is false -> terminate function execution:
+			return CRV<CToken>(pAST.getContent(), Error::SUCCESS);
+		}
+
+		//Execute the functions inside the body:
+		if (!(lSubTrees.size() >= 2)) {
+			//Error no body found:
+			return CRV<CToken>(pAST.getContent(), Error::Interpreter::MISSING_BODY);
+		}
+
+		if (lSubTrees[1].getContent().getType() != Token::BRANCH) {
+			//Only one expression is represented in the body:
+			return interpret(lSubTrees[1]); //Interpret the expression.
+		}
+		else {
+			//Multiple expressions need to be evaluated:
+			CLinkedList<CAbstractSyntaxTree<CToken>> ltBodyExpressions; //Stores the expressions of the if-statement's body.
+			ltBodyExpressions.addAll(lSubTrees[1].getSubTrees());
+			for (int i = 0; i < ltBodyExpressions.size(); i++) {
+				CRV<CToken> rvEval = interpret(ltBodyExpressions[i]); //Execute expression.
+				if (rvEval.getErrorMessage() != Error::SUCCESS) {
+					//An error occured:
+					return rvEval;
+				}
+			}
+			//Every expression was successfully executed:
+			return CRV<CToken>(pAST.getContent(), Error::SUCCESS);
 		}
 	}
 };

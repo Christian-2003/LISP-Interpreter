@@ -78,7 +78,9 @@ namespace Error {
 		CANNOT_CONVERT_STRING_TO_INT = 39, //Cannot convert string to integer.
 		CANNOT_CONVERT_STRING_TO_DOUBLE = 40, //Cannot convert string to double.
 		CANNOT_CONVERT_STRING_TO_BOOL = 41, //Cannot convert string to boolean.
-		CANNOT_CONVERT_STRING_TO_CHAR = 42 //Cannot convert string to character.
+		CANNOT_CONVERT_STRING_TO_CHAR = 42, //Cannot convert string to character.
+		MISSING_CONDITION = 43, //A condition in control structure is missing.
+		MISSING_BODY = 44 //The body of a control structure is missing.
 	};
 
 
