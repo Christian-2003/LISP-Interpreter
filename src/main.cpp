@@ -106,6 +106,7 @@ inline void execute(string psFilename, bool pbDebugMode) {
 		rvInterpreter = interpreter.interpret(lASTs[i]);
 		if (rvInterpreter.getErrorMessage() != Error::SUCCESS) {
 			//An error occured:
+			cout << '\n';
 			printError(rvInterpreter.getContent(), rvInterpreter.getErrorMessage());
 			return;
 		}
@@ -307,7 +308,7 @@ inline void printError(CToken errorToken, short int pnErrorMessage) {
 int main() {
 	SetTextColor(7);
 	cout << "==========================================================================================" << endl;
-	cout << "LispInterpreter 2021 Developer Command Promt v0.4.2" << endl;
+	cout << "LispInterpreter 2021 Developer Command Promt v0.5" << endl;
 	cout << "Made by ChosenChris" << endl;
 	cout << "==========================================================================================\n" << endl;
 	string sFilePath = ""; //Stores the filepath (Can be changed through cd).

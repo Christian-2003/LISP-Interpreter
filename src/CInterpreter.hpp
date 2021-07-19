@@ -627,6 +627,11 @@ private:
 			return ifStatement(pAST);
 		}
 
+		else if (headNode.getLexeme() == Keyword::WHILE) {
+			//Evaluate while-loop:
+			return whileLoop(pAST);
+		}
+
 		else {
 			//Found invalid keyword:
 			return CRV<CToken>(headNode, Error::Interpreter::INCORRECT_TOKEN);
@@ -760,7 +765,152 @@ private:
 					return rvEval;
 				}
 			}
-			//Every expression was successfully executed -> Restore the old variables:
+		}
+		//Every expression was successfully executed -> Restore the old variables:
+		for (unsigned int i = 0; i < lOldVariables.size(); i++) {
+			for (unsigned int j = 0; j < lVariables.size(); j++) {
+				if (lOldVariables[i].getName() == lVariables[j].getName() && lOldVariables[i].getValue() != lVariables[j].getValue()) {
+					//Found identical variable with different value:
+					lOldVariables.remove(i); //Remove old variable.
+					lOldVariables.add(lVariables[j], i); //Add new variable.
+				}
+			}
+		}
+		lVariables.clear();
+		lVariables.addAll(lOldVariables); //Restore old variables.
+		return CRV<CToken>(pAST.getContent(), Error::SUCCESS);
+	}
+
+
+
+	/**
+	* This function is used to evaluate a while-loop
+	* The headnode of the passed AST must resemble the while-keyword.
+	* 
+	* @param pAST	Abstract syntax tree, which resembles the while-loop
+	* @return		Error message and token, which caused the error.
+	*/
+	CRV<CToken> whileLoop(CAbstractSyntaxTree<CToken> pAST) {
+		if (pAST.getContent().getLexeme() != Keyword::WHILE) {
+			//Error: Incorrect token found:
+			return CRV<CToken>(pAST.getContent(), Error::Interpreter::INCORRECT_TOKEN);
+		}
+		else if (!pAST.hasSubTrees()) {
+			//Error: The AST does not have any subtrees:
+			return CRV<CToken>(pAST.getContent(), Error::Interpreter::EMPTY_AST_I);
+		}
+
+		CLinkedList<CAbstractSyntaxTree<CToken>> lSubTrees; //Stores the subtrees of the passed AST.
+		lSubTrees.addAll(pAST.getSubTrees());
+		if (!(lSubTrees.size() >= 1)) {
+			//Error: AST does not contain a condition:
+			return CRV<CToken>(pAST.getContent(), Error::Interpreter::MISSING_CONDITION);
+		}
+		CAbstractSyntaxTree<CToken> tCondition = lSubTrees[0]; //Stores the condition of the AST.
+		bool bCondition = false; //Stores wether the loop's condition is true or false.
+		if (tCondition.hasSubTrees()) {
+			//Further evaluation of the condition needed:
+			CRV<CToken> rvEval = interpret(tCondition);
+			if (rvEval.getErrorMessage() != Error::SUCCESS) {
+				//An error occured:
+				return rvEval;
+			}
+			CToken condToken = rvEval.getContent(); //Stores the returned token, which stores the boolean for the condition.
+			if (condToken.getType() != Token::U_BOOL || (condToken.getType() == Token::U_INT && (stoi(condToken.getLexeme()) != 1 || stoi(condToken.getLexeme()) != 0)) || (condToken.getType() == Token::U_DOUBLE && (stod(condToken.getLexeme()) != 1 || stod(condToken.getLexeme()) != 0))) {
+				//Error: Incorrect datatype encountered:
+				return CRV<CToken>(rvEval.getContent(), Error::produceConvertError(rvEval.getContent().getType(), Token::U_BOOL));
+			}
+			if ((condToken.getType() == Token::U_BOOL && condToken.getLexeme() == "t") || (condToken.getType() == Token::U_INT && stoi(condToken.getLexeme()) == 1) || (condToken.getType() == Token::U_DOUBLE && stod(condToken.getLexeme()) == 1)) {
+				//Condition is true:
+				bCondition = true;
+			}
+		}
+		else {
+			//No further evaluation needed:
+			CToken condToken = tCondition.getContent(); //Stores the returned token, which stores the boolean for the condition.
+			if (condToken.getType() != Token::U_BOOL || (condToken.getType() == Token::U_INT && (stoi(condToken.getLexeme()) != 1 || stoi(condToken.getLexeme()) != 0)) || (condToken.getType() == Token::U_DOUBLE && (stod(condToken.getLexeme()) != 1 || stod(condToken.getLexeme()) != 0))) {
+				//Error: Incorrect datatype encountered:
+				return CRV<CToken>(tCondition.getContent(), Error::produceConvertError(tCondition.getContent().getType(), Token::U_BOOL));
+			}
+			if ((condToken.getType() == Token::U_BOOL && condToken.getLexeme() == "t") || (condToken.getType() == Token::U_INT && stoi(condToken.getLexeme()) == 1) || (condToken.getType() == Token::U_DOUBLE && stod(condToken.getLexeme()) == 1)) {
+				//Condition is true:
+				bCondition = true;
+			}
+		}
+
+		CLinkedList<CVariable> lOldVariables; //Stores the variables before the execution of the while-loop.
+		lOldVariables.addAll(lVariables);
+
+		//Loop:
+		while (true) {
+			bCondition = false;
+			if (tCondition.hasSubTrees()) {
+				//Further evaluation of the condition needed:
+				CRV<CToken> rvEval = interpret(tCondition);
+				if (rvEval.getErrorMessage() != Error::SUCCESS) {
+					//An error occured:
+					return rvEval;
+				}
+				CToken condToken = rvEval.getContent(); //Stores the returned token, which stores the boolean for the condition.
+				if (condToken.getType() != Token::U_BOOL || (condToken.getType() == Token::U_INT && (stoi(condToken.getLexeme()) != 1 || stoi(condToken.getLexeme()) != 0)) || (condToken.getType() == Token::U_DOUBLE && (stod(condToken.getLexeme()) != 1 || stod(condToken.getLexeme()) != 0))) {
+					//Error: Incorrect datatype encountered:
+					return CRV<CToken>(rvEval.getContent(), Error::produceConvertError(rvEval.getContent().getType(), Token::U_BOOL));
+				}
+				if ((condToken.getType() == Token::U_BOOL && condToken.getLexeme() == "t") || (condToken.getType() == Token::U_INT && stoi(condToken.getLexeme()) == 1) || (condToken.getType() == Token::U_DOUBLE && stod(condToken.getLexeme()) == 1)) {
+					//Condition is true:
+					bCondition = true;
+				}
+			}
+			else {
+				//No further evaluation needed:
+				CToken condToken = tCondition.getContent(); //Stores the returned token, which stores the boolean for the condition.
+				if (condToken.getType() != Token::U_BOOL || (condToken.getType() == Token::U_INT && (stoi(condToken.getLexeme()) != 1 || stoi(condToken.getLexeme()) != 0)) || (condToken.getType() == Token::U_DOUBLE && (stod(condToken.getLexeme()) != 1 || stod(condToken.getLexeme()) != 0))) {
+					//Error: Incorrect datatype encountered:
+					return CRV<CToken>(tCondition.getContent(), Error::produceConvertError(tCondition.getContent().getType(), Token::U_BOOL));
+				}
+				if ((condToken.getType() == Token::U_BOOL && condToken.getLexeme() == "t") || (condToken.getType() == Token::U_INT && stoi(condToken.getLexeme()) == 1) || (condToken.getType() == Token::U_DOUBLE && stod(condToken.getLexeme()) == 1)) {
+					//Condition is true:
+					bCondition = true;
+				}
+			}
+			if (!bCondition) {
+				//The condition is false -> End the iteration of the while-loop:
+				break;
+			}
+
+			//Get the body's statements:
+			if (lSubTrees.size() < 2) {
+				//Error: The body is missing:
+				return CRV<CToken>(pAST.getContent(), Error::Interpreter::MISSING_BODY);
+			}
+			else if (lSubTrees.size() > 2) {
+				//Error: The statement has too many arguments:
+				return CRV<CToken>(lSubTrees[2].getContent(), Error::Interpreter::TOO_MANY_ARGUMENTS);
+			}
+			CAbstractSyntaxTree<CToken> tBodyAST; //Stores the AST of the body.
+			tBodyAST = lSubTrees[1];
+			//Execute expressions:
+			if (tBodyAST.getContent().getType() != Token::BRANCH) {
+				//Only one expression needs to be evaluated:
+				CRV<CToken> rvEval = interpret(tBodyAST);
+				if (rvEval.getErrorMessage() != Error::SUCCESS) {
+					//An error occured:
+					return rvEval;
+				}
+			}
+			else {
+				//Multiple expressions need to be evaluated:
+				CLinkedList<CAbstractSyntaxTree<CToken>> ltBodyExpressions; //Stores the expressions of the loop's body.
+				ltBodyExpressions.addAll(tBodyAST.getSubTrees());
+				for (unsigned int i = 0; i < ltBodyExpressions.size(); i++) {
+					CRV<CToken> rvEval = interpret(ltBodyExpressions[i]); //Execute current expression.
+					if (rvEval.getErrorMessage() != Error::SUCCESS) {
+						//An error occured:
+						return rvEval;
+					}
+				}
+			}
+			//Every expression was successfully evaluated -> Restore old variables:
 			for (unsigned int i = 0; i < lOldVariables.size(); i++) {
 				for (unsigned int j = 0; j < lVariables.size(); j++) {
 					if (lOldVariables[i].getName() == lVariables[j].getName() && lOldVariables[i].getValue() != lVariables[j].getValue()) {
@@ -772,8 +922,9 @@ private:
 			}
 			lVariables.clear();
 			lVariables.addAll(lOldVariables); //Restore old variables.
-			return CRV<CToken>(pAST.getContent(), Error::SUCCESS);
+			//Continue with next iteration...
 		}
-		return CRV<CToken>(pAST.getContent(), Error::SUCCESS); //Not necessary -> Just to remove MSVC compiler warning... \(^_^)/
+		//After execution of statements:
+		return CRV<CToken>(pAST.getContent(), Error::SUCCESS);
 	}
 };
