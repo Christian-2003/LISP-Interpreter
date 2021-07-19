@@ -1,4 +1,4 @@
-# Keywords:
+# Keywords: ![](https://img.shields.io/github/size/ChosenChris/LISP-Interpreter/Documentation/Lisp/Keywords.md?label=File%20size)
 The implemented Lisp dialect allows the use of a variety of different keywords. Those keywords are usually the first element in (most) lists in Lisp. In some situations, other atoms may take the first position in a list.
 
 ### Example:
