@@ -25,7 +25,7 @@ namespace Keyword {
 	/**
 	* Keyword to declare a new boolean variable.
 	*/
-	const string BOOL = "boolean";
+	const string BOOL = "bool";
 
 	/**
 	* Keyword to declare a new character variable.
@@ -36,6 +36,11 @@ namespace Keyword {
 	* Keyword to declare a mew string variable.
 	*/
 	const string STRING = "string";
+
+	/**
+	* Keyword to create a new function without return value.
+	*/
+	const string R_VOID = "void";
 
 	/**
 	* Keyword to change a variable's value.
@@ -66,4 +71,14 @@ namespace Keyword {
 	* Keyword to print anything into the console and add a line break afterwards.
 	*/
 	const string PRINTLN = "println";
+
+	/**
+	* Name of the main function.
+	*/
+	const string MAIN_FUNCTION = "main";
+
+	/**
+	* Keyword to return a value from a function.
+	*/
+	const string RETURN = "return";
 }

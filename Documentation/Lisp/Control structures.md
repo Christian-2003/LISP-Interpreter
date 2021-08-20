@@ -1,5 +1,5 @@
 # Control Flow statements: ![](https://img.shields.io/github/size/ChosenChris/LISP-Interpreter/Documentation/Lisp/Control%20structures.md?label=File%20size)
-> The Lisp Tutorials have been written for version _alpha-0.4_. Examples and practices that are described in this document may not be up to date.
+> The Lisp Tutorials have been written for version _1.0_. Examples and practices that are described in this document may not be up to date.
 
 <br/>
 
@@ -32,13 +32,15 @@ The `if` statement is the most basic of all control statements. It tells your pr
 For example, a chewing gum machine could allow a chewing gum to be dispensed _only_ if there is a certain amount of money inserted into the machine. One possible implementation for such an algorith, could be as follows:
 ```Lisp
 ;Listing 001: Chewing gum machine
-(double amountOfMoney)
-(set amountOfMoney 0.5) ;The inserted amount of money is changed to 0.50€
+(void main () (
+    (double amountOfMoney)
+    (set amountOfMoney 0.5) ;The inserted amount of money is changed to 0.50€
 
-;The if clause: inserted amount of money must be greater than or equal to 1.0€
-(if (>= amountOfMoney 1.0) (
-    ;Body of the if clause: Dispense chewing gum
-    (println "Dispensed chewing gum.")
+    ;The if clause: inserted amount of money must be greater than or equal to 1.0€
+    (if (>= amountOfMoney 1.0) (
+        ;Body of the if clause: Dispense chewing gum
+        (println "Dispensed chewing gum.")
+    ))
 ))
 ```
 If this condition evaluates to _false_ (or `NIL`, as it would be called in Lisp), which means that not enough money was inserted into the machine, the interpreter jumps to the end of the `if` statement.
@@ -46,11 +48,13 @@ If this condition evaluates to _false_ (or `NIL`, as it would be called in Lisp)
 In addition, encapsulating statements into a list is optional, but only if there is exactly one statement in the body:
 ```Lisp
 ;Listing 002: Chewing gum machine
-(double amountOfMoney)
-(set amountOfMoney 0.5)
+(void main () (
+    (double amountOfMoney)
+    (set amountOfMoney 0.5)
 
-;Same as in listing 001, but without encapsulated statements
-(if (>= amountOfMoney 1.0) (println "Dispensed chewing gum."))
+    ;Same as in listing 001, but without encapsulated statements
+    (if (>= amountOfMoney 1.0) (println "Dispensed chewing gum."))
+))
 ```
 Deciding when to use encapsulated statements is a matter of personal taste. Making use of encapsulated statements may make the sourecode easiert to read and understand.
 
@@ -64,24 +68,27 @@ The `if-else` statement provides a secondary path of execution when the conditio
 You can use an `if-else` statement to print an error message when the inserted amount of money is not large enough:
 ```Lisp
 ;Listing 003: More advanced chewing gum machine
-(double amountOfMoney)
-(set amountOfMoney 0.5)
+(void main () (
+    (double amountOfMoney)(set amountOfMoney 0.5)
 
-(if (>= amountOfMoney 1.0) (
-    (println "Dispensed chewing gum.")
-)(
-    ;Body of the else clause: Prints error message
-    (println "Error: Not enough money inserted!")
+    (if (>= amountOfMoney 1.0) (
+        (println "Dispensed chewing gum.")
+    )(
+        ;Body of the else clause: Prints error message
+        (println "Error: Not enough money inserted!")
+    ))
 ))
 ```
 As before, you can choose not to encapsulate the statement of the else clause, but only if there is a single statement:
 ```Lisp
 ;Listing 004: More advanced chewing gum machine
-(double amountOfMoney)
-(set amountOfMoney 0.5)
+(void main () (
+    (double amountOfMoney)
+    (set amountOfMoney 0.5)
 
-;Same as in Listing 003, but without encapsulated statements
-(if (>= amountOfMoney 1.0) (println "Dispensed chewing gum.") (println "Error: Not enough money inserted!"))
+    ;Same as in Listing 003, but without encapsulated statements
+    (if (>= amountOfMoney 1.0) (println "Dispensed chewing gum.") (println "Error: Not enough money inserted!"))
+))
 ```
 
 <br/>
@@ -89,16 +96,18 @@ As before, you can choose not to encapsulate the statement of the else clause, b
 The following program utilizes encapsulated `if` and `if-else` statements in order to give a better feedback to the user:
 ```Lisp
 ;Listing 005: Most advanced chewing gum machine
-(double amountOfMoney)
-(set amountOfMoney 0.5)
+(void main () (
+    (double amountOfMoney)
+    (set amountOfMoney 0.5)
 
-(if (>= amountOfMoney 1.0) (
-    (println "Dispensed chewing gum.")
-    (if (> amountOfMoney 1.0) (
-        (println "Change: " (- amountOfMoney 1.0))
+    (if (>= amountOfMoney 1.0) (
+        (println "Dispensed chewing gum.")
+        (if (> amountOfMoney 1.0) (
+            (println "Change: " (- amountOfMoney 1.0))
+        ))
+    )(
+        (println "Error: Not enough money inserted!")
     ))
-)(
-    (println "Error: Not enough money inserted!")
 ))
 ```
 
@@ -122,13 +131,15 @@ The `while` statement continually executes a part of sourcecode **while** a spec
 For example, a car could accelerate only while the pedal is pushed repeatedly until a certail speed is reached. One possible implementation of such an algorithm might look like this:
 ```Lisp
 ;Listing 006: Car acceleration
-(int speed 0)
-(bool isPedalPushed T) ;The pedal is now pushed
+(void main () (
+    (int speed 0)
+    (bool isPedalPushed T) ;The pedal is now pushed
 
-;The while loop: Statements in it's body are only executed while the pedal is pushed and the speed of the car is less than or equal to 100
-(while (& isPedalPushed (<= speed 100)) (
-    ;Body of the while loop: Add 10 to the speed with every iteration
-    (set speed (+ speed 10))
+    ;The while loop: Statements in it's body are only executed while the pedal is pushed and the speed of the car is less than or equal to 100
+    (while (& isPedalPushed (<= speed 100)) (
+        ;Body of the while loop: Add 10 to the speed with every iteration
+        (set speed (+ speed 10))
+    ))
 ))
 ```
 If the condition `(& ispEdalPushed (<= speed 100))` evaluates to `T`, the statements in the loop's body are executed. After the execution, the condition is checked again and the cycle repeats until the condition evaluates to `NIL`. If this happens, the interpreter jumps to the end of the loop and continues to evaluate the sourcecode.
@@ -136,11 +147,13 @@ If the condition `(& ispEdalPushed (<= speed 100))` evaluates to `T`, the statem
 In addition to that, if the body of a while loop contains only one statement, there is no need to encapsulate this statement into another list:
 ```Lisp
 ;Listing 007: Car acceleration
-(int speed 0)
-(bool isPedalPushed T)
+(void main () (
+    (int speed 0)
+    (bool isPedalPushed T)
 
-;Same as in listing 006, but without encapsulated statements
-(while (& isPedalPushed (<= speed 100)) (set speed (+ speed 10)))
+    ;Same as in listing 006, but without encapsulated statements
+    (while (& isPedalPushed (<= speed 100)) (set speed (+ speed 10)))
+))
 ```
 Deciding when to use encapsulated statements is a matter of personal taste. Making use of encapsulated statements may make the sourecode easiert to read and understand.
 
@@ -149,8 +162,10 @@ Deciding when to use encapsulated statements is a matter of personal taste. Maki
 You can implement an infinity loop using the `while` keyword as follows:
 ```Lisp
 ;Listing 008: Infinity loop
-(while T (
-    ;...
+(void main () (
+    (while T (
+        ;...
+    ))
 ))
 ```
 

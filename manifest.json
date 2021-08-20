@@ -1,7 +1,7 @@
 {
     "description": "Evaluates sourcecode written in Lisp.",
-    "manifest_version": 0.5,
+    "manifest_version": 1.0,
     "name": "LISP-Interpreter",
-    "version": "alpha-0.5",
+    "version": "1.0",
     "homepage_url": "https://github.com/ChosenChris/LISP-Interpreter"
 }

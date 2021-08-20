@@ -17,6 +17,7 @@ REMARKS:	This file contains the class "CInterpreter" with which an abstract synt
 #include "CToken.hpp"
 #include "CTokenizer.hpp"
 #include "CVariable.hpp"
+#include "CFunction.hpp"
 #include "Variables/ErrorMessages.hpp"
 #include "Variables/KeywordTypes.hpp"
 #include "Variables/TokenTypes.hpp"
@@ -38,8 +39,12 @@ private:
 	*/
 	CLinkedList<CVariable> lVariables;
 
+	/**
+	* Stores a list of every function which is implemented by the user.
+	*/
+	CLinkedList<CFunction> lFunctions;
 
-	
+
 
 private:
 	/**
@@ -102,12 +107,64 @@ private:
 
 public:
 	/**
+	* This function takes a list of abstract syntax trees, each of which HAS TO RESEMBLE a Lisp function.
+	* 
+	* @param pltASTs	List of abstract syntax trees, which resemble Lisp functions.
+	* @return			Error message.
+	*/
+	CRV<CToken> interpret(CLinkedList<CAbstractSyntaxTree<CToken>> pltASTs) {
+		//Each passed abstract syntax tree resembles a function:
+		for (unsigned int i = 0; i < pltASTs.size(); i++) {
+			//Add every function to the list of functions:
+			CFunction newFunc;
+			CRV<CToken> funcReturn = newFunc.evaluateFunctionSourceCode(pltASTs[i]);
+			if (funcReturn.getErrorMessage() != Error::SUCCESS) {
+				//An error occured:
+				return funcReturn;
+			}
+			lFunctions.add(newFunc);
+		}
+
+		//Find the main function:
+		for (unsigned int i = 0; i < lFunctions.size(); i++) {
+			if (lFunctions[i].getName() == Keyword::MAIN_FUNCTION) {
+				//Found main function:
+				if (lFunctions[i].getParameterAmount() != 0) {
+					//The function has too many parameters:
+					return CRV<CToken>(CToken(), Error::Interpreter::MAIN_FUNCTION_HAS_PARAMETERS);
+				}
+				else if (lFunctions[i].getReturnType() != Token::U_VOID) {
+					//The function does not have "void" as return type:
+					return CRV<CToken>(CToken(), Error::Interpreter::MAIN_FUNCTION_HAS_INCORRECT_RETURN_TYPE);
+				}
+				//Interpret each expression from the Lisp main-function:
+				CLinkedList<CAbstractSyntaxTree<CToken>> ltMainExpressions; //Stores every expression of the main-function.
+				ltMainExpressions.addAll(lFunctions[i].getExpressions());
+				for (unsigned int j = 0; j < ltMainExpressions.size(); j++) {
+					CRV<CToken> rvEval = interpretExpression(ltMainExpressions[j]); //Interprets the current expression.
+					if (rvEval.getErrorMessage() != Error::SUCCESS) {
+						//An error occured:
+						return rvEval;
+					}
+				}
+				//Every expression was successfully interpreted:
+				return CRV<CToken>(CToken(), Error::SUCCESS);
+			}
+		}
+		//Main function does not exist:
+		return CRV<CToken>(CToken(), Error::Interpreter::MISSING_MAIN_FUNCTION);
+	}
+
+
+
+private:
+	/**
 	* This function can interpret an abstract syntax tree.
 	* 
 	* @param pAST	Abstract syntax tree, which is supposed to be evaluated by the interpreter.
 	* @return		Error message.
 	*/
-	CRV<CToken> interpret(CAbstractSyntaxTree<CToken> pAST) {
+	CRV<CToken> interpretExpression(CAbstractSyntaxTree<CToken> pAST) {
 		CRV<CToken> rvEval;
 		//Evaluate AST:
 		if (pAST.getContent().getType() == Token::OPERATOR_ARITHMETIC || pAST.getContent().getType() == Token::OPERATOR_RELATIONAL || pAST.getContent().getType() == Token::OPERATOR_BOOL) {
@@ -161,7 +218,7 @@ private:
 			}
 			else if (currentAST.getContent().getType() == Token::IDENTIFIER) {
 				//Found variablename or function call:
-				CRV<CToken> rvEval = interpret(currentAST); //Stores the result of the evaluation of the identifier.
+				CRV<CToken> rvEval = interpretExpression(currentAST); //Stores the result of the evaluation of the identifier.
 				if (rvEval.getErrorMessage() != Error::SUCCESS) {
 					//An error occured:
 					return rvEval;
@@ -455,6 +512,9 @@ private:
 			//Found invalid token:
 			return CRV<CToken>(headNode, Error::Interpreter::INCORRECT_TOKEN);
 		}
+
+		//Return SUCCESS -> Only needed to eliminate compiler warning. \(^_^)/
+		return CRV<CToken>(headNode, Error::SUCCESS);
 	}
 	
 
@@ -524,7 +584,7 @@ private:
 				}
 				else {
 					//Need to evaluate the token:
-					CRV<CToken> rvEval = interpret(lASTs[0]);
+					CRV<CToken> rvEval = interpretExpression(lASTs[0]);
 					if (rvEval.getErrorMessage() != Error::SUCCESS) {
 						//An error occured:
 						return rvEval;
@@ -571,7 +631,7 @@ private:
 			}
 			else {
 				//Need to evaluate the token:
-				CRV<CToken> rvEval = interpret(lASTs[0]);
+				CRV<CToken> rvEval = interpretExpression(lASTs[0]);
 				if (rvEval.getErrorMessage() != Error::SUCCESS) {
 					//An error occured:
 					return rvEval;
@@ -591,7 +651,7 @@ private:
 				CAbstractSyntaxTree<CToken> current = lASTs[i]; //Stores the current AST:
 				if (current.hasSubTrees ()) {
 					//Further evaluation needed:
-					CRV<CToken> rvEval = interpret(current);
+					CRV<CToken> rvEval = interpretExpression(current);
 					if (rvEval.getErrorMessage() != Error::SUCCESS) {
 						//An error occured:
 						return rvEval;
@@ -600,12 +660,12 @@ private:
 				}
 				else if (current.getContent().getType() == Token::IDENTIFIER) {
 					//Need to get the value of variable:
-					CRV<CVariable> rvGetVar = getVariable(current.getContent().getLexeme());
-					if (rvGetVar.getErrorMessage() != Error::SUCCESS) {
+					CRV<CToken> rvEval = interpretExpression(current);
+					if (rvEval.getErrorMessage() != Error::SUCCESS) {
 						//An error occured:
-						return CRV<CToken>(current.getContent(), rvGetVar.getErrorMessage());
+						return rvEval;
 					}
-					cout << rvGetVar.getContent().getValue();
+					cout << rvEval.getContent().getLexeme();
 				}
 				else if (current.getContent().getType() == Token::U_INT || current.getContent().getType() == Token::U_DOUBLE || current.getContent().getType() == Token::U_BOOL || current.getContent().getType() == Token::U_CHAR || current.getContent().getType() == Token::U_STRING) {
 					//Element resembles value which can be printed:
@@ -620,11 +680,11 @@ private:
 				cout << "\n";
 			}
 			return CRV<CToken>(headNode, Error::SUCCESS);
-		}	
-		
+		}
+
 		else if (headNode.getLexeme() == Keyword::IF) {
-			//Evaluate if-statement:
-			return ifStatement(pAST);
+		//Evaluate if-statement:
+		return ifStatement(pAST);
 		}
 
 		else if (headNode.getLexeme() == Keyword::WHILE) {
@@ -632,29 +692,63 @@ private:
 			return whileLoop(pAST);
 		}
 
+		else if (headNode.getLexeme() == Keyword::RETURN) {
+			//Evaluate return-statement:
+			if (pAST.hasSubTrees()) {
+				if (pAST.getSubTreeNumber() == 1) {
+					//Return the ONLY subtree of the return statement:
+					CAbstractSyntaxTree<CToken> tReturnValue = pAST.getSubTreeAtIndex(0);
+					if (tReturnValue.hasSubTrees() || !(tReturnValue.getContent().getType() == Token::U_INT || tReturnValue.getContent().getType() == Token::U_DOUBLE || tReturnValue.getContent().getType() == Token::U_CHAR || tReturnValue.getContent().getType() == Token::U_BOOL || tReturnValue.getContent().getType() == Token::U_STRING)) {
+						//Further evaluation needed for return value:
+						CRV<CToken> rvEval = interpretExpression(tReturnValue);
+						if (rvEval.getErrorMessage() != Error::SUCCESS) {
+							//An error occured:
+							return rvEval;
+						}
+						return CRV<CToken>(rvEval.getContent(), Error::Interpreter::INFO_RETURN_STATEMENT_ENCOUNTERED);
+					}
+					return CRV<CToken>(pAST.getSubTreeAtIndex(0).getContent(), Error::Interpreter::INFO_RETURN_STATEMENT_ENCOUNTERED);
+				}
+				else {
+					//Too many values encountered which could be returned:
+					return CRV<CToken>(headNode, Error::Interpreter::TOO_MANY_VALUES_TO_RETURN);
+				}
+			}
+		}
+
 		else {
 			//Found invalid keyword:
 			return CRV<CToken>(headNode, Error::Interpreter::INCORRECT_TOKEN);
 		}
 	}
-	
+
 
 
 	/**
 	* This function is used to evaluate an identifier.
 	* The headnode of this AST must resemble the identifier.
-	* 
+	*
 	* @param pAST	Abstract syntax tree, which represents the identifier.
 	* @return		Error message including content.
 	*/
 	CRV<CToken> evaluateIdentifier(CAbstractSyntaxTree<CToken> pAST) {
-		if (pAST.hasSubTrees()) {
-			//Identifier resembles function call:
-			return CRV<CToken>(pAST.getContent(), Error::Interpreter::INCORRECT_TOKEN);
-			//TODO: Implement functions and function calls!
+		//Find out if keyword resembles function call or variable:
+		bool bIsVariable = false; //Stores wether the keyword resembles a variable or not.
+
+		if (!pAST.hasSubTrees()) {
+			//There are no subtrees, which could resemble passed arguments within a function call:
+			for (unsigned int i = 0; i < lVariables.size(); i++) {
+				if (lVariables[i].getName() == pAST.getContent().getLexeme()) {
+					//Found variable name:
+					bIsVariable = true;
+					break;
+				}
+			}
 		}
-		else {
-			//Identifier reesembles variable name:
+
+
+		if (bIsVariable) {
+			//Identifier resembles variable name:
 			CRV<CVariable> rvVariable = getVariable(pAST.getContent().getLexeme());
 			if (rvVariable.getErrorMessage() != Error::SUCCESS) {
 				//An error occured:
@@ -662,6 +756,38 @@ private:
 			}
 			//Variable was successfully returned:
 			return CRV<CToken>(CToken(rvVariable.getContent().getValue(), rvVariable.getContent().getType(), pAST.getContent().getFilename(), pAST.getContent().getLine()), Error::SUCCESS);
+		}
+
+		else {
+			//Identifier resembles a function name:
+			CLinkedList<CToken> plPassedArguments;
+			if (pAST.hasSubTrees()) {
+				//The function call has arguments which are passed:
+				for (unsigned int i = 0; i < pAST.getSubTrees().size(); i++) {
+					CToken currentArg;
+					//Find out if each argument has subtrees and needs further evaluation:
+					if (pAST.getSubTreeAtIndex(i).hasSubTrees() || !(pAST.getSubTreeAtIndex(i).getContent().getType() == Token::U_INT || pAST.getSubTreeAtIndex(i).getContent().getType() == Token::U_DOUBLE || pAST.getSubTreeAtIndex(i).getContent().getType() == Token::U_CHAR || pAST.getSubTreeAtIndex(i).getContent().getType() == Token::U_BOOL || pAST.getSubTreeAtIndex(i).getContent().getType() == Token::U_STRING)) {
+						//Further evaluation neccessary:
+						CRV<CToken> rvEval;
+						rvEval = interpretExpression(pAST.getSubTreeAtIndex(i));
+						if (rvEval.getErrorMessage() != Error::SUCCESS) {
+							//An error occured:
+							return rvEval;
+						}
+						currentArg = rvEval.getContent();
+					}
+					else {
+						//No further evaluation neccessary:
+						currentArg = pAST.getSubTreeAtIndex(i).getContent();
+					}
+
+					//Add the current argument to the list of passed arguments:
+					plPassedArguments.add(currentArg);
+				}
+			}
+			
+			//Call the function:
+			return callFunction(pAST.getContent(), plPassedArguments);
 		}
 	}
 	
@@ -695,7 +821,7 @@ private:
 		bool bCondition = false; //Stores wether the statement's condition is true or false.
 		if (tCondition.hasSubTrees()) {
 			//Further evaluation of the condition needed:
-			CRV<CToken> rvEval = interpret(tCondition);
+			CRV<CToken> rvEval = interpretExpression(tCondition);
 			if (rvEval.getErrorMessage() != Error::SUCCESS) {
 				//An error occured:
 				return rvEval;
@@ -748,7 +874,7 @@ private:
 		//Execute expressions:
 		if (lBodyAST.getContent().getType() != Token::BRANCH) {
 			//Only one expression is represented in the body:
-			CRV<CToken> rvEval = interpret(lBodyAST); //Interpret the expression.
+			CRV<CToken> rvEval = interpretExpression(lBodyAST); //Interpret the expression.
 			if (rvEval.getErrorMessage() != Error::SUCCESS) {
 				//An error occured:
 				return rvEval;
@@ -759,7 +885,7 @@ private:
 			CLinkedList<CAbstractSyntaxTree<CToken>> ltBodyExpressions; //Stores the expressions of the if-statement's body.
 			ltBodyExpressions.addAll(lBodyAST.getSubTrees());
 			for (unsigned int i = 0; i < ltBodyExpressions.size(); i++) {
-				CRV<CToken> rvEval = interpret(ltBodyExpressions[i]); //Execute expression.
+				CRV<CToken> rvEval = interpretExpression(ltBodyExpressions[i]); //Execute expression.
 				if (rvEval.getErrorMessage() != Error::SUCCESS) {
 					//An error occured:
 					return rvEval;
@@ -810,7 +936,7 @@ private:
 		bool bCondition = false; //Stores wether the loop's condition is true or false.
 		if (tCondition.hasSubTrees()) {
 			//Further evaluation of the condition needed:
-			CRV<CToken> rvEval = interpret(tCondition);
+			CRV<CToken> rvEval = interpretExpression(tCondition);
 			if (rvEval.getErrorMessage() != Error::SUCCESS) {
 				//An error occured:
 				return rvEval;
@@ -846,7 +972,7 @@ private:
 			bCondition = false;
 			if (tCondition.hasSubTrees()) {
 				//Further evaluation of the condition needed:
-				CRV<CToken> rvEval = interpret(tCondition);
+				CRV<CToken> rvEval = interpretExpression(tCondition);
 				if (rvEval.getErrorMessage() != Error::SUCCESS) {
 					//An error occured:
 					return rvEval;
@@ -892,7 +1018,7 @@ private:
 			//Execute expressions:
 			if (tBodyAST.getContent().getType() != Token::BRANCH) {
 				//Only one expression needs to be evaluated:
-				CRV<CToken> rvEval = interpret(tBodyAST);
+				CRV<CToken> rvEval = interpretExpression(tBodyAST);
 				if (rvEval.getErrorMessage() != Error::SUCCESS) {
 					//An error occured:
 					return rvEval;
@@ -903,7 +1029,7 @@ private:
 				CLinkedList<CAbstractSyntaxTree<CToken>> ltBodyExpressions; //Stores the expressions of the loop's body.
 				ltBodyExpressions.addAll(tBodyAST.getSubTrees());
 				for (unsigned int i = 0; i < ltBodyExpressions.size(); i++) {
-					CRV<CToken> rvEval = interpret(ltBodyExpressions[i]); //Execute current expression.
+					CRV<CToken> rvEval = interpretExpression(ltBodyExpressions[i]); //Execute current expression.
 					if (rvEval.getErrorMessage() != Error::SUCCESS) {
 						//An error occured:
 						return rvEval;
@@ -927,4 +1053,97 @@ private:
 		//After execution of statements:
 		return CRV<CToken>(pAST.getContent(), Error::SUCCESS);
 	}
+
+
+
+private:
+	/**
+	* This function is used to call the LISP-function which has the same name as the passed
+	* argument psFunctionName. The parameter plArguments resembles a list of LISP-arguments
+	* that are passed onto the LISP-function.
+	* If the LISP-function is executed without occuring errors, this function returns the LISP-
+	* function's return value. If any errors are caused, the causing token is returned with
+	* an appropriate erorr message.
+	* 
+	* @param pFunctionName	Name of the LISP-function.
+	* @param plArguments	List of arguments, that are passed onto the LISP-function.
+	* @return				The return value of the function or error message.
+	*/
+	CRV<CToken> callFunction(CToken pFunctionName, CLinkedList<CToken> plArguments) {
+		//Find the function:
+		CFunction function;
+		bool bFunctionExists = false;
+		for (unsigned int i = 0; i < lFunctions.size(); i++) {
+			if (lFunctions[i].getName() == pFunctionName.getLexeme()) {
+				//Found function at index i:
+				function = lFunctions[i];
+				bFunctionExists = true;
+				break;
+			}
+		}
+		if (!bFunctionExists) {
+			//The called function does not exist:
+			return CRV<CToken>(pFunctionName, Error::Interpreter::FUNCTION_DOES_NOT_EXIST);
+		}
+		
+		//Check wether the function's parameter are identical with the passed arguments:
+		CLinkedList<CVariable> lFunctionParameters; //Stores the parameters of the function.
+		if (function.getParameterAmount() != plArguments.size()) {
+			//Incorrect number of arguments are passed:
+			return CRV<CToken>(pFunctionName, Error::Interpreter::INCORRECT_NUMBER_OF_ARGUMENTS_PASSED);
+		}
+		
+		for (unsigned int i = 0; i < plArguments.size(); i++) {
+			if (function.getParameters()[i].getType() != plArguments[i].getType()) {
+				//Error: The passed type is not identical with the parameter type:
+				return CRV<CToken>(plArguments[i], Error::produceConvertError(plArguments[i].getType(), function.getParameters()[i].getType()));
+			}
+			lFunctionParameters.add(CVariable(function.getParameters()[i].getName(), plArguments[i].getLexeme(), plArguments[i].getType()));
+		}
+		
+		//Save the variables of the currently executed function:
+		CLinkedList<CVariable> lOldVariables; //Stores the variables of the current function.
+		lOldVariables.addAll(lVariables);
+		lVariables.clear();
+		lVariables.addAll(lFunctionParameters);
+		
+		//Execute the function's expressions:
+		CLinkedList<CAbstractSyntaxTree<CToken>> lExpressions;
+		CToken returnValue;
+		lExpressions.addAll(function.getExpressions());
+		for (unsigned int i = 0; i < lExpressions.size(); i++) {
+			CRV<CToken> rvEval = interpretExpression(lExpressions[i]);
+			if (rvEval.getErrorMessage() != Error::SUCCESS && rvEval.getErrorMessage() != Error::Interpreter::INFO_RETURN_STATEMENT_ENCOUNTERED) {
+				//An error occured:
+				return rvEval;
+			}
+			else if (rvEval.getErrorMessage() == Error::Interpreter::INFO_RETURN_STATEMENT_ENCOUNTERED) {
+				//The function's execution was terminated through a return statement:
+				returnValue = rvEval.getContent();
+				break;
+			}
+		}
+		
+		if (function.getReturnType() == Token::U_VOID) {
+			//No return value expected -> eventually returned values are ignored (ONLY TEMPORARY):
+			//Restore variables of old function call:
+			lVariables.clear();
+			lVariables.addAll(lOldVariables);
+			return CRV<CToken>(pFunctionName, Error::SUCCESS);
+		}
+		
+		//Process the return value:
+		if (returnValue.getType() != function.getReturnType()) {
+			//The returned value's type is not identical with the function's return type:
+			return CRV<CToken>(returnValue, Error::produceConvertError(returnValue.getType(), function.getReturnType()));
+		}
+		
+		//Restore variables of old function call:
+		lVariables.clear();
+		lVariables.addAll(lOldVariables);
+		
+		//Return the return value:
+		return CRV<CToken>(returnValue, Error::SUCCESS);
+	}
+
 };

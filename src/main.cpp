@@ -101,15 +101,13 @@ inline void execute(string psFilename, bool pbDebugMode) {
 	//-+-+-+-+-+-+- INTERPRETING -+-+-+-+-+-+-
 	CInterpreter interpreter;
 	SetTextColor(7); //Change textcolor for output while interpreting.
-	for (unsigned int i = 0; i < lASTs.size(); i++) {
-		CRV<CToken> rvInterpreter;
-		rvInterpreter = interpreter.interpret(lASTs[i]);
-		if (rvInterpreter.getErrorMessage() != Error::SUCCESS) {
-			//An error occured:
-			cout << '\n';
-			printError(rvInterpreter.getContent(), rvInterpreter.getErrorMessage());
-			return;
-		}
+	CRV<CToken> rvInterpreter;
+	rvInterpreter = interpreter.interpret(lASTs);
+	if (rvInterpreter.getErrorMessage() != Error::SUCCESS) {
+		//An error occured:
+		cout << '\n';
+		printError(rvInterpreter.getContent(), rvInterpreter.getErrorMessage());
+		return;
 	}
 }
 
@@ -292,6 +290,33 @@ inline void printError(CToken errorToken, short int pnErrorMessage) {
 	case Error::Interpreter::MISSING_BODY:
 		cerr << "Missing body of statement." << endl;
 		break;
+	case Error::Interpreter::INCORRECT_FUNCTION_DEFINITION:
+		cerr << "Incorrect function definition." << endl;
+		break;
+	case Error::Interpreter::FUNCTION_NAME_IS_INCORRECT:
+		cerr << "Incorrect function name." << endl;
+		break;
+	case Error::Interpreter::MISSING_MAIN_FUNCTION:
+		cerr << "LISP main-function is missing." << endl;
+		break;
+	case Error::Interpreter::MAIN_FUNCTION_HAS_PARAMETERS:
+		cerr << "LISP main-function has too many parameters." << endl;
+		break;
+	case Error::Interpreter::MAIN_FUNCTION_HAS_INCORRECT_RETURN_TYPE:
+		cerr << "LISP main-function has incorrect return type." << endl;
+		break;
+	case Error::Interpreter::MISSING_FUNCTION_EXPRESSION:
+		cerr << "Function has no expressions." << endl;
+		break;
+	case Error::Interpreter::FUNCTION_DOES_NOT_EXIST:
+		cerr << "The called function does not exist." << endl;
+		break;
+	case Error::Interpreter::INCORRECT_NUMBER_OF_ARGUMENTS_PASSED:
+		cerr << "An incorrect number of arguments is passed." << endl;
+		break;
+	case Error::Interpreter::TOO_MANY_VALUES_TO_RETURN:
+		cerr << "LISP function can only return up to exactly one argument." << endl;
+		break;
 	default:
 		cerr << "Encountered unknown error." << endl;
 		break;
@@ -308,7 +333,7 @@ inline void printError(CToken errorToken, short int pnErrorMessage) {
 int main() {
 	SetTextColor(7);
 	cout << "==========================================================================================" << endl;
-	cout << "LispInterpreter 2021 Developer Command Promt v0.5" << endl;
+	cout << "LispInterpreter 2021 Developer Command Promt v1.0" << endl;
 	cout << "Made by ChosenChris" << endl;
 	cout << "==========================================================================================\n" << endl;
 	string sFilePath = ""; //Stores the filepath (Can be changed through cd).

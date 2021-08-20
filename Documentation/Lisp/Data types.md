@@ -1,11 +1,13 @@
 # Data types: ![](https://img.shields.io/github/size/ChosenChris/LISP-Interpreter/Documentation/Lisp/Data%20types.md?label=File%20size)
-> The Lisp Tutorials have been written for version _alpha-0.4_. Examples and practices that are described in this document may not be up to date.
+> The Lisp Tutorials have been written for version _1.0_. Examples and practices that are described in this document may not be up to date.
 
 <br/>
 
 ### Table of contents:
 1. [Primitive Data Types](#primitive-types)
 2. [Default values](#default-values)
+3. [Variable declaration and initialization](#declaration)
+4. [Function definition](#function)
 
 <br/>
 <br/>
@@ -18,7 +20,9 @@
 This Lisp dialect is a statically-typed programming language, which means that all variables must first be declared before they can be used. The declaration of a new variable involves stating it's type and name:
 ```Lisp
 ;Listing 001: Exemplary declaration and initialization
-(int field 1)
+(void main () (
+    (int field 1)
+))
 ```
 Doing this tells your program that a variable named "field" exists, holds numerical data and has an initial value of "1". A variable's data type determines the values it may contain, plus the operations that may be performed with it. In addition to `int`, this Lisp dialect supports several other primitive data types. A primitive type is predefined by the language and is named by a reserved keyword. The supported primitive data types are:
 - **`int`:** The `int` data type is a 32-bit signed integer, which has a minimum value of -2<sup>31</sup> and a maximum value of 2<sup>31</sup>-1.
@@ -47,120 +51,48 @@ Data Type | Default Value | Remarks
 
 <br/>
 
-### Integer declaration and initialization:
+***
 
-An integer variable can be declared as follows:
+## Variable declaration and initialization: <a name="declaration"></a>
+
+In the following, the declaration and initialization of a variable is described using the `int` keyword. Other data types work in the exact the same way.
+
+A integer variable can be declared as follows:
 ```Lisp
 ;Listing 002: Declaration of integer variable
-(int myVar)
+(void main () (
+    (int myVar)
+))
 ```
 By doing so, a variable named "myVar" is declared, which can store numerical values, since it is declared using the `int` keyword. The variable is not initialized in this statement, which makes the interpreter assign the default value of _0_ to the variable.
 
 If you want to initialize the variable, there are two possible ways to do so:
 ```Lisp
 ;Listing 003: Declaration and initialization of integer variable
+(void main () (
+    ;Declaration and initialization in a single statement
+    (int myVar 15)
 
-;Declaration and initialization in a single statement
-(int myVar 15)
-
-;Declaration and initialization in two seperate statements
-(int myVar)
-(set myVar 15)
+    ;Declaration and initialization in two seperate statements
+    (int myNewVar)
+    (set myNewVar 15)
+))
 ```
 When doing this, the variable will be initialized with the value _15_.
 
 <br/>
 
-### Double declaration and initialization:
+***
 
-A double variable can be declared as follows:
+## Function definition: <a name="function"></a>
+
+A LISP function must return a value when using any of the earlier mentioned [primitive data types](primitive-types). The keyword that indicates the return type of a function takes the first place in the list that resembles the function's definition:
 ```Lisp
-;Listing 004: Declaration of double variable
-(double myVar)
+;Listing 004: Exemplary definition of a function
+(string getName () (
+;^^^^^^ <- Indicates that the function returns a String
+    (return "John Doe")
+    ;       ^^^^^^^^^^ <- String is returned using the "return" keyword
+))
 ```
-By doing so, a variable named "myVar" is declared, which can store numerical, double-precision values, since it is declared using the `double` keyword. The variable is not initialized in this statement, which makes the interpreter assign the default value of _0.0_ to the variable.
-
-If you want to initialize the variable, there are two possible ways to do so:
-```Lisp
-;Listing 005: Declaration and initialization of double variable
-
-;Declaration and initialization in a single statement
-(double myVar 3.2)
-
-;Declaration and initialization in two seperate statements
-(double myVar)
-(set myVar 3.2)
-```
-When doing this, the variable will be initialized with the value _3.2_.
-
-<br/>
-
-### Boolean declaration and initialization:
-
-A boolean variable can be declared as follows:
-```Lisp
-;Listing 006: Declaration of boolean variable
-(bool myVar)
-```
-By doing so, a variable named "myVar" is declared, which can store a boolean value, since it is declared using the `bool` keyword. The variable is not initialized in this statement, which makes the interpreter assign the default value _NIL_ to the variable.
-
-If you want to initialize the variable, there are two possible ways to do so:
-```Lisp
-;Listing 007: Declaration and initialization of boolean variable
-
-;Declaration and initialization in a single statement
-(bool myVar T)
-
-;Declaration and initialization in two seperate statements
-(bool myVar)
-(set myVar T)
-```
-When doing this, the variable will be initialized with the value _T_.
-
-<br/>
-
-### Character declaration and initialization:
-
-A character variable can be declared as follows:
-```Lisp
-;Listing 008: Declaration of character variable
-(char myVar)
-```
-By doing so, a variable named "myVar" is declared, which can store a character value, since it is declared using the `char` keyword. The variable is not initialized in this statement, which makes the interpreter assign the default value _' '_ to the variable.
-
-If you want to initialize the variable, there are two different ways to do so:
-```Lisp
-;Listing 009: Declaration and initialization of character variable
-
-;Declaration and initialization in a single statement
-(char myVar 'c')
-
-;Declaration and initialization in two seperate statements
-(char myVar)
-(set myVar 'c')
-```
-When doing this, the variable will be initialized with the value _'c'_.
-
-<br/>
-
-### String declaration and initialization:
-
-A string variable can be declared as follows:
-```Lisp
-;Listing 010: Declaration of string variable
-(string myVar)
-```
-By doing so, a variable named "myVar" is declared, which can store a string value, since it is declared using the `string`keyword. The variable is not initialized in this statement, which makes the interpreter assign the default value _""_ to the variable.
-
-If you want to initialize the variable, there are two different ways to do so:
-```Lisp
-;Listing 011: Declaration and initialization of string variable
-
-;Declaration and initialization in a single statement
-(string myVar "Hello World")
-
-;Declaration and initialization in two seperate statements
-(string myVar)
-(set myVar "Hello World")
-```
-When doing this, the variable will be initialized with the value _"Hello World"_.
+However, it is not always neccessary to return a value. Utilizing the data type `void`, which does only work with functions, no value will be returned.

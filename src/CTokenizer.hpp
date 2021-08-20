@@ -91,7 +91,7 @@ private:
 			}
 			sString += chCurrentCharacter;
 		}
-		if (sString == Keyword::INT || sString == Keyword::DOUBLE || sString == Keyword::BOOL || sString == Keyword::CHAR || sString == Keyword::STRING || sString == Keyword::SET || sString == Keyword::DEFINE || sString == Keyword::IF || sString == Keyword::WHILE || sString == Keyword::PRINT || sString == Keyword::PRINTLN) {
+		if (sString == Keyword::INT || sString == Keyword::DOUBLE || sString == Keyword::BOOL || sString == Keyword::CHAR || sString == Keyword::STRING || sString == Keyword::SET || sString == Keyword::DEFINE || sString == Keyword::IF || sString == Keyword::WHILE || sString == Keyword::PRINT || sString == Keyword::PRINTLN || sString == Keyword::RETURN) {
 			lTokensObj.add(CToken(sString, Token::KEYWORD, sFilename, nCurrentLine));
 		}
 		else {

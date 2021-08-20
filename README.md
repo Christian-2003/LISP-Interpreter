@@ -1,4 +1,4 @@
-# LISP Interpreter ![](https://img.shields.io/github/languages/code-size/ChosenChris/LISP-Interpreter) ![Generic badge](https://img.shields.io/badge/License-MIT-green.svg) ![](https://img.shields.io/github/manifest-json/v/ChosenChris/LISP-Interpreter?color=red)
+# LISP Interpreter ![Code size](https://img.shields.io/github/languages/code-size/ChosenChris/LISP-Interpreter) ![Version](https://img.shields.io/github/manifest-json/v/ChosenChris/LISP-Interpreter?color=green) ![License](https://img.shields.io/badge/License-MIT-red.svg)
 This LISP interpreter is an improved version of my old interpreter, which can be found [here](https://github.com/ChosenChris/LispInterpreter).
 
 Due to poorly implemented algorithms, I have decided to rebuild the interpreter in a better way, this time utilizing the mechanics and speed of the programming language C++.
@@ -39,7 +39,9 @@ You can download the newest release of the interpreter [here](https://github.com
 <br/>
 
 ### Download and compile the sourcecode:
-If you prefer to download the sourcecode from the [code](https://github.com/ChosenChris/LISP-Interpreter)-page, feel free to do so. This interpreter is written in the programming language C++ and needs to be compiled with a respective compiler. I suggest to use the Microsoft's [MSVC](https://visualstudio.microsoft.com/vs/features/cplusplus/) compiler to do so. After successfully compiling the sourcecode you can continue with your [first steps](#first-steps).
+If you prefer to download the sourcecode from the [code](https://github.com/ChosenChris/LISP-Interpreter)-page, feel free to do so. This interpreter is written in the programming language C++ and needs to be compiled with a respective compiler. The source code of this repository has only been compiled using Microsoft's MSVC compiler and may not be compilable with other C/C++-Compilers.
+
+After successfully compiling the sourcecode you can continue with your [first steps](#first-steps).
 
 <br/>
 
@@ -51,10 +53,12 @@ After executing the interpreter, you are welcomed with a command promt. The visu
 <br/>
 
 ### Write the sourcecode:
-The first thing you need to do is to write the sourcecode which you want to execute with the interpreter. In the following, we will write a simple _Hello World_-program in Lisp. Copy the following sourcecode into a file, which is located in the same directory as the previously downloaded executable and name said file "sampleCode.lsp".
+The first thing you need to do is to write the source code which you want to execute with the interpreter. In the following, we will write a simple _Hello World_-program in Lisp. Copy the following source code into a file, which is located in the same directory as the previously downloaded executable and name said file "sampleCode.lsp".
 ```Lisp
 ;File: sampleCode.lsp
-(print "Hello World")
+(void main () (
+    (println "Hello World")
+))
 ```
 
 <br/>

@@ -80,7 +80,17 @@ namespace Error {
 		CANNOT_CONVERT_STRING_TO_BOOL = 41, //Cannot convert string to boolean.
 		CANNOT_CONVERT_STRING_TO_CHAR = 42, //Cannot convert string to character.
 		MISSING_CONDITION = 43, //A condition in control structure is missing.
-		MISSING_BODY = 44 //The body of a control structure is missing.
+		MISSING_BODY = 44, //The body of a control structure is missing.
+		INCORRECT_FUNCTION_DEFINITION = 45, //A function is incorrectly defined.
+		FUNCTION_NAME_IS_INCORRECT = 46, //The name of a function is incorrect.
+		MISSING_MAIN_FUNCTION = 47, //The main function is missing.
+		MAIN_FUNCTION_HAS_PARAMETERS = 48, //The main function has parameters.
+		MAIN_FUNCTION_HAS_INCORRECT_RETURN_TYPE = 49, //The main function does not have "void" as return type.
+		MISSING_FUNCTION_EXPRESSION = 50, //A declared function has no expressions.
+		FUNCTION_DOES_NOT_EXIST = 51, //A called function does not exist.
+		INCORRECT_NUMBER_OF_ARGUMENTS_PASSED = 52, //An incorrect number of arguments are passed during a function call.
+		INFO_RETURN_STATEMENT_ENCOUNTERED = 53, //An return statement was encountered. THIS IS NO ERROR MESSAGE, JUST A NOTIFICATION FOR THE INTERPRETER ! ! !
+		TOO_MANY_VALUES_TO_RETURN = 54 //There are too many values which are supposed to be returned by a function.
 	};
 
 

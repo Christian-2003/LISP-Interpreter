@@ -26,7 +26,8 @@ enum Token : const short int {
 	OPERATOR_ARITHMETIC = 10, //Arithmetic operator (+, -, *, /).
 	OPERATOR_RELATIONAL = 11, //Relational operator (!, =, >=, <=, >, <).
 	OPERATOR_BOOL = 12, //Boolean operator (&, |).
-	BRANCH = 13 //Represents a branch in the AST (Not part of the actual sourcecode!).
+	BRANCH = 13, //Represents a branch in the AST (Not part of the actual sourcecode!).
+	U_VOID = 14 //Set's a function's return value to void.
 };
 
 
@@ -67,6 +68,8 @@ string printTokenType(short int pnTokenType) {
 		return "Boolean_Operator";
 	case 13:
 		return "Branch";
+	case 14:
+		return "void";
 	default:
 		return "Unknown";
 	}

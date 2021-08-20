@@ -93,10 +93,11 @@ public:
 	* @return			Subtree at the specified index.
 	*/
 	CAbstractSyntaxTree<T> getSubTreeAtIndex(unsigned int pnIndex) {
-		if (pnIndex < lSubTreesObj.size() - 1) {
+		if (pnIndex < lSubTreesObj.size()) {
 			return lSubTreesObj[pnIndex];
 		}
-		return nullptr;
+		//return nullptr;
+		return CAbstractSyntaxTree<T>();
 	}
 
 
@@ -124,9 +125,6 @@ public:
 	unsigned int getSubTreeNumber() {
 		if (!hasSubTrees()) {
 			return 0;
-		}
-		else {
-			lSubTreesObj.size();
 		}
 		return lSubTreesObj.size();
 	}
