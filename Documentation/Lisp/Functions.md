@@ -8,6 +8,7 @@
 2. [Parameters](#parameters)
 3. [Return types](#return)
 4. [Main function](#main)
+5. [Calling a function](#call)
 
 <br/>
 <br/>
@@ -133,5 +134,59 @@ The main function contains the source code which is executed at the beginning. U
 ;Listing 008: Exemplary main function
 (void main () (
     (print "Hello World.")
+))
+```
+
+<br/>
+
+***
+
+## Calling a function: <a name="call"></a>
+
+A function can be called from anywhere in the source code. If the called function does not contain parameters, the function's name can simply be written into the source code like a variable and utilized in the same way:
+```Lisp
+;Listing 009: Exemplary function call without parameter and return value
+(void main () (
+    (printText) ;Call the function "printText"
+))
+
+(void printText () (
+    (print "Hello World")
+))
+```
+If the function has a specified return type, the function can be called as follows:
+```Lisp
+;Listing 010: Exemplary function call without parameter and with return value
+(void main () (
+    (print printText)
+))
+
+(string printText () (
+    (return "Hello World")
+))
+```
+
+<br/>
+
+On the other hand, if the function has parameters, it needs to be encapsulated into a list. The function's name will make up the first element in the list while every other element make up the passed arguments:
+```Lisp
+;Listing 011: Exemplary function call with parameter and no return value
+(void main () (
+    (printSum 15 7)
+))
+
+(void printSum ((int a)(int b)) (
+    (print (+ a b))
+))
+```
+If the function has a specified return type, it might be called as follows:
+```Lisp
+;Listing 012: Exemplary function call with parameter and return value
+(void main () (
+    (print (sum 15 7))
+))
+
+(int sum ((int a)(int b)) (
+    (return (+ a b))
 ))
 ```

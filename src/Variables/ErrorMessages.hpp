@@ -90,7 +90,8 @@ namespace Error {
 		FUNCTION_DOES_NOT_EXIST = 51, //A called function does not exist.
 		INCORRECT_NUMBER_OF_ARGUMENTS_PASSED = 52, //An incorrect number of arguments are passed during a function call.
 		INFO_RETURN_STATEMENT_ENCOUNTERED = 53, //An return statement was encountered. THIS IS NO ERROR MESSAGE, JUST A NOTIFICATION FOR THE INTERPRETER ! ! !
-		TOO_MANY_VALUES_TO_RETURN = 54 //There are too many values which are supposed to be returned by a function.
+		TOO_MANY_VALUES_TO_RETURN = 54, //There are too many values which are supposed to be returned by a function.
+		STACK_OVERFLOW = 55 //Stackoverflow error.
 	};
 
 

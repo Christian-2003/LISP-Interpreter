@@ -7,6 +7,7 @@ REMARKS:	This file contains the class "CInterpreter" with which an abstract synt
 
 #include <iostream>
 #include <string>
+#include <stdio.h>
 
 #include "CAbstractSyntaxTree.hpp"
 #include "CFileScanner.hpp"
@@ -147,6 +148,7 @@ public:
 						return rvEval;
 					}
 				}
+
 				//Every expression was successfully interpreted:
 				return CRV<CToken>(CToken(), Error::SUCCESS);
 			}
