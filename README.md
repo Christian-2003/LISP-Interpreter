@@ -1,4 +1,7 @@
 # LISP Interpreter ![Code size](https://img.shields.io/github/languages/code-size/ChosenChris/LISP-Interpreter) ![Version](https://img.shields.io/github/manifest-json/v/ChosenChris/LISP-Interpreter?color=green) ![License](https://img.shields.io/badge/License-MIT-red.svg)
+
+![](https://raw.githubusercontent.com/ChosenChris/LISP-Interpreter/main/resources/Preview.png)
+
 This LISP interpreter is an improved version of my old interpreter, which can be found [here](https://github.com/ChosenChris/LispInterpreter).
 
 Due to poorly implemented algorithms, I have decided to rebuild the interpreter in a better way, this time utilizing the mechanics and speed of the programming language C++.
@@ -9,8 +12,9 @@ Due to poorly implemented algorithms, I have decided to rebuild the interpreter 
 1. [Description](#description)
 2. [Usage](#usage)
 3. [First steps](#first-steps)
-4. [How to contribute](#contribution)
-5. [License](#license)
+4. [Coding](#coding)
+5. [How to contribute](#contribution)
+6. [License](#license)
 
 <br/>
 <br/>
@@ -81,6 +85,35 @@ If you have saved the sourcecode to another directory, you need to provide the f
 
 ### Available commands:
 The command promt is capable of executing a small number of comamnds. You can type `help` in order to get further information on available commands.
+
+<br/>
+
+***
+
+## Coding: <a name="coding"></a>
+After you finished with your [first steps](#first-steps), you may deal with other elements of this LISP dialect.
+
+### Elements of the LISP dialect:
+This LISP dialect comes with a variety of [keywords](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Documentation/Lisp/Keywords.md), [control flow statements](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Documentation/Lisp/Control%20structures.md) and [data types](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Documentation/Lisp/Data%20types.md). It is even possible to implement [functions](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Documentation/Lisp/Functions.md) with this programming language.
+
+For further information on arithmetic-, relational- or boolean operations, look up [this](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Documentation/Lisp/Operations.md) document.
+
+### Exception handling:
+Incorrectly implemented LISP source code might cause the interpreter to throw an exception. Exceptions usually display the _file_, _line_ and _token_ which caused the error. In addition to that, an error message is displayed. The following source code generates an exception:
+```Lisp
+;File: sampleCode.lsp
+(void main (
+    (int myVar "Hello World")
+    ;Cannot store String in integer-variable
+))
+```
+The corresponding exception:
+
+![](https://raw.githubusercontent.com/ChosenChris/LISP-Interpreter/main/resources/Exemplary-error-message.png)
+
+As you can see, the filename, line number and token which caused the error are mentioned. The error message `Cannot convert string to integer` implies that the String "Hello World" cannot be converted and stored in a variable of type integer.
+
+If the provided error message does not help you to solve the error, you may look up the documentation of every possible error message [here](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Documentation/Lisp/Error%20messages.md).
 
 <br/>
 

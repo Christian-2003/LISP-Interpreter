@@ -331,7 +331,7 @@ An incorrect token was encountered in the source code.
 ## Interpreter Erorr 21: <a name="21"></a>
 _Too many arguments._
 
-The interpreter encountered too many arguemnts that are passed to a function.
+The interpreter encountered too many arguments that are passed to a function.
 
 ### Example:
 The following source code generates Error 21.
