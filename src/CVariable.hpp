@@ -17,7 +17,7 @@ using namespace std;
 /**
 * Instances of this class resemble variable's in Lisp.
 * 
-* @author	ChosenChris
+* @author	Christian-2003
 * @version	12.07.2021
 */
 class CVariable {

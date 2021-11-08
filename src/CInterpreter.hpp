@@ -30,7 +30,7 @@ using namespace std;
 /**
 * The class "CInterpreter" can be used to evaluate an abstract syntax tree.
 * 
-* @author	ChosenChris
+* @author	Christian-2003
 * @version	14j.07.2021
 */
 class CInterpreter {

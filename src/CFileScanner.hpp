@@ -18,7 +18,7 @@ using namespace std;
 /**
 * An object of this class can read a file's content and return said content as a String.
 * 
-* @author	ChosenChris
+* @author	Christian-2003
 * @version	05.06.2021
 */
 class CFileScanner {

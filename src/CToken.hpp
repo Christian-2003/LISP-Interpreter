@@ -13,7 +13,7 @@ using namespace std;
 /**
 * Objects of this type represent a Token, with which the Interpreter can work.
 * 
-* @author	ChosenChris
+* @author	Christian-2003
 * @version	30.05.2021
 */
 class CToken {

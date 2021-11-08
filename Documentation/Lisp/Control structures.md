@@ -1,4 +1,4 @@
-# Control Flow statements: ![](https://img.shields.io/github/size/ChosenChris/LISP-Interpreter/Documentation/Lisp/Control%20structures.md?label=File%20size)
+# Control Flow statements: ![](https://img.shields.io/github/size/Christian-2003/LISP-Interpreter/Documentation/Lisp/Control%20structures.md?label=File%20size)
 > The Lisp Tutorials have been written for version _1.0_. Examples and practices that are described in this document may not be up to date.
 
 <br/>
@@ -27,7 +27,7 @@ The statements inside your sourcecode are generally executed from top to bottom,
 ### The `if` Statement
 The `if` statement is the most basic of all control statements. It tells your program to execute a particular part of your code **only if** a certain condition evaluates to _true_ (or `T`, as it would be called in Lisp). The UML flowchart of an `if` statement looks like this:
 
-<img src="https://raw.githubusercontent.com/ChosenChris/LISP-Interpreter/main/resources/Flowchart-if.png" width="150"/>
+<img src="https://raw.githubusercontent.com/Christian-2003/LISP-Interpreter/main/resources/Flowchart-if.png" width="150"/>
 
 For example, a chewing gum machine could allow a chewing gum to be dispensed _only_ if there is a certain amount of money inserted into the machine. One possible implementation for such an algorith, could be as follows:
 ```Lisp
@@ -63,7 +63,7 @@ Deciding when to use encapsulated statements is a matter of personal taste. Maki
 ### The `if-else` Statement
 The `if-else` statement provides a secondary path of execution when the condition of an `if` clause evaluates to _NIL_. The UML flowchart of an `if-else` statement looks like this:
 
-<img src="https://raw.githubusercontent.com/ChosenChris/LISP-Interpreter/main/resources/Flowchart-if-else.png" width="210"/>
+<img src="https://raw.githubusercontent.com/Christian-2003/LISP-Interpreter/main/resources/Flowchart-if-else.png" width="210"/>
 
 You can use an `if-else` statement to print an error message when the inserted amount of money is not large enough:
 ```Lisp
@@ -126,7 +126,7 @@ Variables that werde declared before the `if` statement can be accessed in it's 
 
 The `while` statement continually executes a part of sourcecode **while** a specified condition is `T`. The UML flowchart of a `while` loop looks like this:
 
-<img src="https://raw.githubusercontent.com/ChosenChris/LISP-Interpreter/main/resources/Flowchart-while.png" width="170"/>
+<img src="https://raw.githubusercontent.com/Christian-2003/LISP-Interpreter/main/resources/Flowchart-while.png" width="170"/>
 
 For example, a car could accelerate only while the pedal is pushed repeatedly until a certail speed is reached. One possible implementation of such an algorithm might look like this:
 ```Lisp

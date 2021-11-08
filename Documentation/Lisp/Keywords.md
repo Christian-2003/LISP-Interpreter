@@ -1,4 +1,4 @@
-# Keywords: ![](https://img.shields.io/github/size/ChosenChris/LISP-Interpreter/Documentation/Lisp/Keywords.md?label=File%20size)
+# Keywords: ![](https://img.shields.io/github/size/Christian-2003/LISP-Interpreter/Documentation/Lisp/Keywords.md?label=File%20size)
 The implemented Lisp dialect allows the use of a variety of different keywords. Those keywords are usually the first element in (most) lists in Lisp. In some situations, other atoms may take the first position in a list.
 
 ### Example:
@@ -182,7 +182,7 @@ Every upcoming element in the same list as the keyword will be printed ton the t
 ## `if`: <a name="if"> </a>
 
 ### Remarks:
-This keyword indicates an if-statement, which is used to change the path that your program is following during it's execution. Further information on the if-statement can be found [here](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Documentation/Lisp/Control%20structures.md#if).
+This keyword indicates an if-statement, which is used to change the path that your program is following during it's execution. Further information on the if-statement can be found [here](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Documentation/Lisp/Control%20structures.md#if).
 
 <br/>
 

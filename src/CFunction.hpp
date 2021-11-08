@@ -23,7 +23,7 @@ using namespace std;
 /**
 * This class can resemble a function in Lisp.
 * 
-* @author	ChosenChris
+* @author	Christian-2003
 * @version	21.07.2021
 */
 class CFunction {

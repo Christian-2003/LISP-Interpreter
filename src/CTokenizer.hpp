@@ -22,7 +22,7 @@ using namespace std;
 /**
 * Any object of this class can split up the source code into Tokens.
 * 
-* @author	ChosenChris
+* @author	Christian-2003
 * @version	30.05.2021
 */
 class CTokenizer {

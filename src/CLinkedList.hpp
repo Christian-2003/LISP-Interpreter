@@ -16,7 +16,7 @@ using namespace std;
 * Objects of this class represent a LinkedList in C++.
 * This class resembles a subclass of the C++ STL's "list"-class.
 * 
-* @author	ChosenChris
+* @author	Christian-2003
 * @version	27.05.2021
 */
 template<class T>

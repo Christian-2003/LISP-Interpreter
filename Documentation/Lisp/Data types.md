@@ -1,4 +1,4 @@
-# Data types: ![](https://img.shields.io/github/size/ChosenChris/LISP-Interpreter/Documentation/Lisp/Data%20types.md?label=File%20size)
+# Data types: ![](https://img.shields.io/github/size/Christian-2003/LISP-Interpreter/Documentation/Lisp/Data%20types.md?label=File%20size)
 > The Lisp Tutorials have been written for version _1.0_. Examples and practices that are described in this document may not be up to date.
 
 <br/>

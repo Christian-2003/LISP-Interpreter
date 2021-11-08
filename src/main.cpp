@@ -334,7 +334,7 @@ int main() {
 	SetTextColor(7);
 	cout << "==========================================================================================" << endl;
 	cout << "LispInterpreter 2021 Developer Command Promt v1.0" << endl;
-	cout << "Made by ChosenChris" << endl;
+	cout << "Made by Christian-2003" << endl;
 	cout << "==========================================================================================\n" << endl;
 	string sFilePath = ""; //Stores the filepath (Can be changed through cd).
 	bool bDebugStatus = false; //Indicates, wether advanced debug-information should be shown or not.

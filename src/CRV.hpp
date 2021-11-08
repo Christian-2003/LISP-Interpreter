@@ -15,7 +15,7 @@ using namespace std;
 * The class "CRV" is used to return values of from a function and includes extra information.
 * RV means "Return value".
 * 
-* @author	ChosenChris
+* @author	Christian-2003
 * @version	30.05.2021
 */
 template<class T>

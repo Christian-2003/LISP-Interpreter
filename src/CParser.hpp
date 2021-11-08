@@ -25,7 +25,7 @@ using namespace std;
 * Tokens (of the type "CLinkedList<CToken>"). The abstract syntax tree can be traversed afterwards through
 * another class.
 * 
-* @author	ChosenChris
+* @author	Christian-2003
 * @version	01.06.2021
 */
 class CParser {

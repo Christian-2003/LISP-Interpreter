@@ -1,4 +1,4 @@
-# Functions: ![](https://img.shields.io/github/size/ChosenChris/LISP-Interpreter/Documentation/Lisp/Functions.md?label=File%20size)
+# Functions: ![](https://img.shields.io/github/size/Christian-2003/LISP-Interpreter/Documentation/Lisp/Functions.md?label=File%20size)
 > The Lisp Tutorials have been written for version _1.0_. Examples and practices that are described in this document may not be up to date.
 
 <br/>
@@ -55,7 +55,7 @@ This function takes the two arguments _p1_ and _p2_, which both have to be integ
 
 ## Parameters: <a name="parameters"></a>
 
-A parameter indicates how many values have to be passed onto the defined function when it is called. Thereby every parameter is defined in a single list and consists of a [primitive data type](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Documentation/Lisp/Data%20types.md#primitive-data-types-) and a name. The data type indicates which type of value can be passed onto the function as this parameter and the name is used to access it's value in the function's body:
+A parameter indicates how many values have to be passed onto the defined function when it is called. Thereby every parameter is defined in a single list and consists of a [primitive data type](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Documentation/Lisp/Data%20types.md#primitive-data-types-) and a name. The data type indicates which type of value can be passed onto the function as this parameter and the name is used to access it's value in the function's body:
 ```Lisp
 ;Listing 002: Exemplary use of parameters
 (void printValue (int value) (
@@ -114,7 +114,7 @@ In this case, the sum of the passed arguments is only printed if the value of th
 <br/>
 
 ### Other return types:
-If a function is supposed to return a value, it is important to specify the type of the returned value. Currently, every [primitive data type](https://github.com/ChosenChris/LISP-Interpreter/blob/main/Documentation/Lisp/Data%20types.md#primitive-data-types-) can be returned by a function:
+If a function is supposed to return a value, it is important to specify the type of the returned value. Currently, every [primitive data type](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Documentation/Lisp/Data%20types.md#primitive-data-types-) can be returned by a function:
 ```Lisp
 ;Listing 007: Exemplary use of return types
 (int sum ((int a)(int b)) (
