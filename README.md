@@ -1,6 +1,6 @@
 # LISP Interpreter ![Code size](https://img.shields.io/github/languages/code-size/Christian-2003/LISP-Interpreter) ![Version](https://img.shields.io/github/manifest-json/v/Christian-2003/LISP-Interpreter?color=green) ![License](https://img.shields.io/badge/License-MIT-red.svg)
 
-![](https://raw.githubusercontent.com/Christian-2003/LISP-Interpreter/main/resources/Preview.png)
+![](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Resources/Preview.png)
 
 This LISP interpreter is an improved version of my old interpreter, which can be found [here](https://github.com/Christian-2003/LispInterpreter).
 
@@ -70,14 +70,14 @@ The first thing you need to do is to write the source code which you want to exe
 ### Start the developer command prompt:
 After successfully saving your sourcecode to the directory, start the command prompt. You should see a terminal that looks something like this:
 
-![](https://raw.githubusercontent.com/Christian-2003/LISP-Interpreter/main/resources/First-steps1.png)
+![](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Resources/First-steps1.png)
 
 <br/>
 
 ### Execute the sourcecode:
 After that, type `execute sampleCode.lsp` into the command prompt. If you have saved the file with the sourcecode to the same directory as the executable, the sourcecode should be executed by now and the string "Hello World" should be shown in the terminal.
 
-![](https://raw.githubusercontent.com/Christian-2003/LISP-Interpreter/main/resources/First-steps2.png)
+![](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Resources/First-steps2.png)
 
 If you have saved the sourcecode to another directory, you need to provide the filepath to the interpreter. In order not to provide the filepath with every execution, you may change the path by using the `cd` command.
 
@@ -109,7 +109,7 @@ Incorrectly implemented LISP source code might cause the interpreter to throw an
 ```
 The corresponding exception:
 
-![](https://raw.githubusercontent.com/Christian-2003/LISP-Interpreter/main/resources/Exemplary-error-message.png)
+![](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Resources/Exemplary-error-message.png)
 
 As you can see, the filename, line number and token which caused the error are mentioned. The error message `Cannot convert string to integer` implies that the String "Hello World" cannot be converted and stored in a variable of type integer.
 
