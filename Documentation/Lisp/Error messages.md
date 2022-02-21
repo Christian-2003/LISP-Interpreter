@@ -1,4 +1,4 @@
-# Control Flow statements: ![](https://img.shields.io/github/size/Christian-2003/LISP-Interpreter/Documentation/Lisp/Error%20messages.md?label=File%20size)
+# Error messages: ![](https://img.shields.io/github/size/Christian-2003/LISP-Interpreter/Documentation/Lisp/Error%20messages.md?label=File%20size)
 
 ### Table of contents:
 FileScanner Error Messages:

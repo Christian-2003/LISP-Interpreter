@@ -44,6 +44,17 @@ These keywords are used in order to print any value to the terminal.
 <br/>
 This keyword indicates an if-statement.
 
+[`while`](#if)
+<br/>
+This keyword indicates a while-loop.
+
+<br/>
+
+### Functions:
+[`return`](#return)
+<br/>
+This keyword is used to return a value from a function.
+
 <br/>
 <br/>
 <br/>
@@ -57,7 +68,7 @@ This keyword indicates an if-statement.
 ## `int`, `double`, `bool`, `char`, `string`: <a name ="declaration"></a>
 
 ### Remarks:
-These keywords are used to **declare** a new variable which stores a value of the respective data type.
+These keywords are used to **declare** a new variable which stores a value of the respective data type. Furthermore, these keywords can be used to indicate a **function's return type**. Further information on functions can be found [here](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Documentation/Lisp/Functions.md). However, this part of the documentation will only focus on the declaration of variables.
 
 <br/>
 
@@ -107,8 +118,6 @@ Represents the value of the declared variable. If no value is given, the variabl
 In case a variable does not get initialized during it's declaration, a standard value will be assigned to it:
 
 <br/>
-<br/>
-<br/>
 
 ***
 
@@ -141,8 +150,6 @@ The new value, for the variable. Please note that the new value has to be of the
 ```
 
 <br/>
-<br/>
-<br/>
 
 ***
 
@@ -173,8 +180,6 @@ Every upcoming element in the same list as the keyword will be printed ton the t
 2 + 5 = 7
 ```
 
-<br/>
-<br/>
 <br/>
 
 ***
@@ -214,3 +219,84 @@ A list of every expression, that is executed when the condition is `NIL`.
 5 is equal to 5:
 The condition is true.
 ```
+
+<br/>
+
+***
+
+## `while`: <a name="while"> </a>
+
+### Remarks:
+This keyword indicates a while-loop, which is used to iterate through a specifif chunk of code several times, while a specific condition is considered to be `T`. Further information on the while-loop can be found [here](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Documentation/Lisp/Control%20structures.md#while).
+
+<br/>
+
+### Arguments:
+_condition_
+<br/>
+The condition states how often the _body_ of the while-loop will be executed. If the condition is `T`, the _body_ will be exectuted one time, after that the condition will be checked again. If the condition is `NIL`, the loop will be cancelled and the next statements will be executed.
+
+_body_
+<br/>
+A list of every expression that should be executed while the _condition_ is `T`.
+
+<br/>
+
+### Example:
+```Lisp
+(int i 0)
+(while (< i 5) (
+    (println "iteration of while-loop: " i)
+    (set i (+ i 1))
+))
+```
+
+### Output:
+```
+iteration of while-loop: 0
+iteration of while-loop: 1
+iteration of while-loop: 2
+iteration of while-loop: 3
+iteration of while-loop: 4
+```
+
+<br/>
+
+***
+
+## `return`: <a name="return"> </a>
+
+### Remarks:
+The return keyword indicates that a specific value is returned from a function. The type of the returned value is defined within the function. More information on functions can be found [here](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Documentation/Lisp/Functions.md).
+
+<br/>
+
+### Arguments:
+_return value_
+<br/>
+The return value resembles the value which will be returned by the function. It's type has to match the function's defined return type.
+
+<br/>
+
+### Example:
+```Lisp
+(void main () (
+    (println func)
+))
+
+(string func () (
+    (return "Hello World.")
+    ;^^^^^^ ^^^^^^^^^^^^^^^
+    ;Key-   Returned value
+    ;word   is a string.
+))
+```
+
+### Output:
+```
+Hello World.
+```
+
+<br/>
+
+***
