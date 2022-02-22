@@ -333,7 +333,7 @@ inline void printError(CToken errorToken, short int pnErrorMessage) {
 int main() {
 	SetTextColor(7);
 	cout << "==========================================================================================" << endl;
-	cout << "LispInterpreter 2021 Developer Command Promt v1.0" << endl;
+	cout << "LispInterpreter 2021 Developer Command Promt v1.7" << endl;
 	cout << "Made by Christian-2003" << endl;
 	cout << "==========================================================================================\n" << endl;
 	string sFilePath = ""; //Stores the filepath (Can be changed through cd).
