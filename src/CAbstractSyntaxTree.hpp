@@ -16,8 +16,10 @@ using namespace std;
 /**
 * Objects of this class represent a node of an abstract syntax tree in C++.
 * 
-* @author	Christian-2003
-* @version	28.05.2021
+* @param <T>	Type of the objects that can be stored in this AST.
+* 
+* @author		Christian-2003
+* @version		28.05.2021
 */
 template<class T>
 class CAbstractSyntaxTree {

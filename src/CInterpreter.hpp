@@ -397,8 +397,22 @@ private:
 					return CRV<CToken>(headNode, Error::produceConvertError(firstOperand.getType(), secondOperand.getType()));
 				}
 				if (firstOperand.getLexeme() == secondOperand.getLexeme()) {
-					//Operands are identical:
+					//Lexemes of operands are identical:
 					return CRV<CToken>(CToken("t", Token::U_BOOL, headNode.getFilename(), headNode.getLine()), Error::SUCCESS);
+				}
+				else if (firstOperand.getType() == Token::U_INT || secondOperand.getType() == Token::U_INT || firstOperand.getType() == Token::U_DOUBLE || secondOperand.getType() == Token::U_DOUBLE) {
+					//Operands are of numerical type (This can be done this way, since the aforeimplemented if-clause makes sure that all the operands are comparable with
+					//each other, so if this condition is true, each operand is of numerical type. Therefore, they can be compared):
+					double val1 = stod(firstOperand.getLexeme());
+					double val2 = stod(secondOperand.getLexeme());
+					//Compare the two values:
+					if (val1 == val2) {
+						//The two operands are identical:
+						return CRV<CToken>(CToken("t", Token::U_BOOL, headNode.getFilename(), headNode.getLine()), Error::SUCCESS);
+					}
+					else {
+						return CRV<CToken>(CToken("nil", Token::U_BOOL, headNode.getFilename(), headNode.getLine()), Error::SUCCESS);
+					}
 				}
 				else {
 					//Operands are not identical:

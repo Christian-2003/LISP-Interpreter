@@ -10,11 +10,12 @@ Due to poorly implemented algorithms, I have decided to rebuild the interpreter 
 
 ## Table of contents:
 1. [Description](#description)
-2. [Usage](#usage)
-3. [First steps](#first-steps)
-4. [Coding](#coding)
-5. [How to contribute](#contribution)
-6. [License](#license)
+2. [System requirements](#requirements)
+3. [Usage](#usage)
+4. [First steps](#first-steps)
+5. [Coding](#coding)
+6. [How to contribute](#contribution)
+7. [License](#license)
 
 <br/>
 <br/>
@@ -28,6 +29,16 @@ This repository resembles an interpreter for a custom dialect of the programming
 An interpreter is a program which is capable of evaluating and executing sourcecode. Unlike a compiler, the interpreter does not create any executable file, so the source code must be interpreted every time one wants to execute it.
 
 Unlike you might thing, Lisp is no programming language, but rather a collection of multiple programming languages, which all have similar paradigms which makes them all feel more alike. The Lisp dialect, which this interpreter can evaluate is inspired by the much more common _STELLA_ dialect, but still different in many ways (and of course with a much smaller functional scope). For further information on my Lisp dialect, visit the [Lisp documentation](https://github.com/Christian-2003/LISP-Interpreter/tree/main/Documentation/Lisp) of this repository.
+
+<br/>
+
+***
+
+### System requirements: <a nem="requirements"></a>
+
+In order for the interpreter to run on your system, you need to have at least **Windows 10** installed.
+
+Due to changes with the [Windows Console and Terminal Ecosystem](https://docs.microsoft.com/en-us/windows/console/ecosystem-roadmap), I do not recommend to run the interpreter with the newly introduced terminal within Windows 11. Instead, I would recommend to use the old Windows 10 terminal when executing the interpreter under Windows 11. The interpreter itself will still work correctly with the new terminal, however there are some irritating occurrences with the displayment within the new terminal.
 
 <br/>
 

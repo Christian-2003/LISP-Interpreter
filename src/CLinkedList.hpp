@@ -16,8 +16,10 @@ using namespace std;
 * Objects of this class represent a LinkedList in C++.
 * This class resembles a subclass of the C++ STL's "list"-class.
 * 
-* @author	Christian-2003
-* @version	27.05.2021
+* @param <T>	Type of the objects that are stores in the list.
+* 
+* @author		Christian-2003
+* @version		27.05.2021
 */
 template<class T>
 class CLinkedList : public list<T> {

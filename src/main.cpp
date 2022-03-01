@@ -17,9 +17,9 @@ REMARKS:	This file contains the "main()"-function, everything that is needed to 
 #include "CInterpreter.hpp"
 
 using namespace std;
-inline void execute(string, bool);
-inline void printAST(CAbstractSyntaxTree<CToken>, int);
-inline void printError(CToken, short int);
+void execute(string, bool);
+void printAST(CAbstractSyntaxTree<CToken>, int);
+void printError(CToken, short int);
 
 
 
@@ -28,7 +28,7 @@ inline void printError(CToken, short int);
 *
 * @param pnColor	Color, to which the text should be changed.
 */
-inline void SetTextColor(int pnColor) {
+void SetTextColor(int pnColor) {
 	HANDLE consoleHANDLE = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(consoleHANDLE, pnColor);
 }
@@ -40,7 +40,7 @@ inline void SetTextColor(int pnColor) {
 *
 * @param psFilename		File, in which the sourcecode is located.
 */
-inline void execute(string psFilename, bool pbDebugMode) {
+void execute(string psFilename, bool pbDebugMode) {
 	//-+-+-+-+-+-+- READ THE FILE -+-+-+-+-+-+-
 	CFileScanner fileScanner;
 	CRV<string> rvFileContent = fileScanner.scan(psFilename);
@@ -118,7 +118,7 @@ inline void execute(string psFilename, bool pbDebugMode) {
 * @param pAST	AST
 * @param nDepth	Depth of the current AST
 */
-inline void printAST(CAbstractSyntaxTree<CToken> pAST, int nDepth) {
+void printAST(CAbstractSyntaxTree<CToken> pAST, int nDepth) {
 	//Print the current node:
 	if (pAST.getContent().getType() == BRANCH) {
 		cout << "[BRANCH]:" << endl;
@@ -148,7 +148,7 @@ inline void printAST(CAbstractSyntaxTree<CToken> pAST, int nDepth) {
 *
 * @param errorToken	Token, which caused the occuring error.
 */
-inline void printError(CToken errorToken, short int pnErrorMessage) {
+void printError(CToken errorToken, short int pnErrorMessage) {
 	if (pnErrorMessage == Error::SUCCESS || pnErrorMessage == Error::Parser::EMPTY_AST_P) {
 		//No error occured:
 		return;
