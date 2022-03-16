@@ -15,6 +15,7 @@ REMARKS:	This file contains the "main()"-function, everything that is needed to 
 #include "CParser.hpp"
 #include "CFileScanner.hpp"
 #include "CInterpreter.hpp"
+#include "CLog.hpp"
 
 using namespace std;
 void execute(string, bool);
@@ -62,7 +63,7 @@ void execute(string psFilename, bool pbDebugMode) {
 	CLinkedList<CToken> tokens;
 	if (rvTokens.getErrorMessage() != Error::SUCCESS) {
 		//An error occured:
-		printError(rvTokens.getContent()[0], rvTokens.getErrorMessage());
+		printError(rvTokens.getContent()[rvTokens.getContent().size() - 1], rvTokens.getErrorMessage());
 		return;
 	}
 	tokens.addAll(rvTokens.getContent());
@@ -160,167 +161,7 @@ void printError(CToken errorToken, short int pnErrorMessage) {
 	}
 	cerr << "error " << pnErrorMessage << ":" << endl;
 	//Print the error message:
-	switch (pnErrorMessage) {
-	case Error::FileScanner::ERROR_FILESCANNER_FILE_DOES_NOT_EXIST:
-		cerr << "The file does not exist." << endl;
-		break;
-	case Error::Tokenizer::TOO_MANY_DECIMALS:
-		cerr << "The number has too many decimal points." << endl;
-		break;
-	case Error::Tokenizer::SOURCECODE_NOT_LONG_ENOUGH:
-		cerr << "The sourcecode is not long enough." << endl;
-		break;
-	case Error::Tokenizer::EMPTY_CHARACTER_ENCOUNTERED:
-		cerr << "Encountered char-type value with no content." << endl;
-		break;
-	case Error::Tokenizer::NO_EXIT_QUOTATION_MARK:
-		cerr << "Missing quotation marks." << endl;
-		break;
-	case Error::Parser::SYNTAX_P:
-		cerr << "Encountered syntax error while parsing." << endl;
-		break;
-	case Error::Parser::ATOM_CAN_NEVER_BE_PARENTHESES:
-		cerr << "Encountered parentheses as atom." << endl;
-		break;
-	case Error::Interpreter::SYNTAX_I:
-		cerr << "Encountered syntax error while interpreting." << endl;
-		break;
-	case Error::Interpreter::OPERANDS_ARE_OF_DIFFERENT_TYPE:
-		cerr << "Encountered operands of different type, that are not compatible with each other." << endl;
-		break;
-	case Error::Interpreter::CANNOT_ADD_BOOLEANS:
-		cerr << "Cannot add multiple boolean values." << endl;
-		break;
-	case Error::Interpreter::CANNOT_SUBTRACT_NON_NUMERIC_VALUES:
-		cerr << "Cannot subtract multiple non-numeric values." << endl;
-		break;
-	case Error::Interpreter::CANNOT_MULTIPLY_NON_NUMERIC_VALUES:
-		cerr << "Cannot multiply multiple non-numeric values." << endl;
-		break;
-	case Error::Interpreter::CANNOT_DIVIDE_NON_NUMERIC_VALUES:
-		cerr << "Cannot divide multiple non-numeric values." << endl;
-		break;
-	case Error::Interpreter::CANNOT_DIVIDE_BY_ZERO:
-		cerr << "Encountered division through zero." << endl;
-		break;
-	case Error::Interpreter::VARIABLE_DOES_NOT_EXIST:
-		cerr << "Variable does not exist." << endl;
-		break;
-	case Error::Interpreter::VARIABLE_NAME_ALREADY_IN_USE:
-		cerr << "Variable with this name is already in use." << endl;
-		break;
-	case Error::Interpreter::EMPTY_AST_I:
-		cerr << "Encountered empty abstract syntax tree." << endl;
-		break;
-	case Error::Interpreter::MISSING_TOKEN:
-		cerr << "Missing token." << endl;
-		break;
-	case Error::Interpreter::INCORRECT_TOKEN:
-		cerr << "Encountered incorrect token." << endl;
-		break;
-	case Error::Interpreter::TOO_MANY_ARGUMENTS:
-		cerr << "Too many arguments." << endl;
-		break;
-	case Error::Interpreter::NOT_ENOUGH_ARGUMENTS:
-		cerr << "Not enough arguments." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_INT_TO_DOUBLE:
-		cerr << "Cannot convert integer to double." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_INT_TO_BOOL:
-		cerr << "Cannot convert integer to boolean." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_INT_TO_CHAR:
-		cerr << "Cannot convert integer to character." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_INT_TO_STRING:
-		cerr << "Cannot convert integer to string." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_DOUBLE_TO_INT:
-		cerr << "Cannot convert double to integer." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_DOUBLE_TO_BOOL:
-		cerr << "Cannot convert double to boolean." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_DOUBLE_TO_CHAR:
-		cerr << "Cannot convert double to character." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_DOUBLE_TO_STRING:
-		cerr << "Cannot convert double to string." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_BOOL_TO_INT:
-		cerr << "Cannot convert boolean to integer." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_BOOL_TO_DOUBLE:
-		cerr << "Cannot convert boolean to double." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_BOOL_TO_CHAR:
-		cerr << "Cannot convert boolean to character." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_BOOL_TO_STRING:
-		cerr << "Cannot convert boolean to string." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_CHAR_TO_INT:
-		cerr << "Cannot convert character to integer." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_CHAR_TO_DOUBLE:
-		cerr << "Cannot convert character to double." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_CHAR_TO_BOOL:
-		cerr << "Cannot convert character to boolean." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_CHAR_TO_STRING:
-		cerr << "Cannot convert character to string." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_STRING_TO_INT:
-		cerr << "Cannot convert string to integer." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_STRING_TO_DOUBLE:
-		cerr << "Cannot convert string to double." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_STRING_TO_BOOL:
-		cerr << "Cannot convert string to boolean." << endl;
-		break;
-	case Error::Interpreter::CANNOT_CONVERT_STRING_TO_CHAR:
-		cerr << "Cannot convert string to character." << endl;
-		break;
-	case Error::Interpreter::MISSING_CONDITION:
-		cerr << "Missing condition of statement." << endl;
-		break;
-	case Error::Interpreter::MISSING_BODY:
-		cerr << "Missing body of statement." << endl;
-		break;
-	case Error::Interpreter::INCORRECT_FUNCTION_DEFINITION:
-		cerr << "Incorrect function definition." << endl;
-		break;
-	case Error::Interpreter::FUNCTION_NAME_IS_INCORRECT:
-		cerr << "Incorrect function name." << endl;
-		break;
-	case Error::Interpreter::MISSING_MAIN_FUNCTION:
-		cerr << "LISP main-function is missing." << endl;
-		break;
-	case Error::Interpreter::MAIN_FUNCTION_HAS_PARAMETERS:
-		cerr << "LISP main-function has too many parameters." << endl;
-		break;
-	case Error::Interpreter::MAIN_FUNCTION_HAS_INCORRECT_RETURN_TYPE:
-		cerr << "LISP main-function has incorrect return type." << endl;
-		break;
-	case Error::Interpreter::MISSING_FUNCTION_EXPRESSION:
-		cerr << "Function has no expressions." << endl;
-		break;
-	case Error::Interpreter::FUNCTION_DOES_NOT_EXIST:
-		cerr << "The called function does not exist." << endl;
-		break;
-	case Error::Interpreter::INCORRECT_NUMBER_OF_ARGUMENTS_PASSED:
-		cerr << "An incorrect number of arguments is passed." << endl;
-		break;
-	case Error::Interpreter::TOO_MANY_VALUES_TO_RETURN:
-		cerr << "LISP function can only return up to exactly one argument." << endl;
-		break;
-	default:
-		cerr << "Encountered unknown error." << endl;
-		break;
-	}
+	cerr << Error::generateErrorMessage(pnErrorMessage) << endl;
 }
 
 
@@ -333,11 +174,13 @@ void printError(CToken errorToken, short int pnErrorMessage) {
 int main() {
 	SetTextColor(7);
 	cout << "==========================================================================================" << endl;
-	cout << "LispInterpreter 2021 Developer Command Promt v1.7" << endl;
+	cout << "LispInterpreter 2021 Developer Command Promt v1.9" << endl;
 	cout << "Made by Christian-2003" << endl;
 	cout << "==========================================================================================\n" << endl;
 	string sFilePath = ""; //Stores the filepath (Can be changed through cd).
 	bool bDebugStatus = false; //Indicates, wether advanced debug-information should be shown or not.
+	bool logEvents = false; //Indicates, whether everything should be logged or not.
+	logger.close(); //Close logger, since logging is deactivated normally.
 	//While loop repeats forever:
 	while (true) {
 		SetTextColor(15);
@@ -368,6 +211,9 @@ int main() {
 		}
 		for_each(sCommand.begin(), sCommand.end(), [](char& c) {c = ::tolower(c); }); //Convert command to lowercase.
 
+		//Log entered command:
+		logger.addEntry_terminalCommand(sCommand, lsArguments);
+
 		//Evaluate command:
 		if (sCommand == "help") {
 			//Show every different command:
@@ -380,6 +226,7 @@ int main() {
 				cout << "EXECUTE       Executes sourcecode from a file." << endl;
 				cout << "CLS           Clears the content of the terminal." << endl;
 				cout << "CD            Shows the name of the current directory, or changes it." << endl;
+				cout << "LOG           Enables or disables the log for the interpreter." << endl;
 				cout << "\n";
 			}
 			else if (lsArguments.size() == 1) {
@@ -419,20 +266,38 @@ int main() {
 					cout << "\tdirectory - Optional argument resembles the new directory. If no argument" << endl;
 					cout << "\t            is given, the current directory is shown.\n" << endl;
 				}
+				else if (sArgument == "log") {
+					//Display information about log-command:
+					SetTextColor(7);
+					cout << "Shows whether the interpreter is currently logging it's events into a log. If the optional" << endl;
+					cout << "argument is passed, the logging is enabled or disabled." << endl;
+					cout << "LOG [log]" << endl;
+					cout << "\t log - Optional argument indicates whether the interpreter should log it's" << endl;
+					cout << "\t       events or not. If no argument is given, the command shows if logging" << endl;
+					cout << "\t       is enabled or disabled.\n" << endl;
+				}
 				else {
 					//Incorrect argument:
 					SetTextColor(12);
 					cerr << "The argument \"" << lsArguments[0] << "\" is incorrect.\n" << endl;
+					logger.addEntry_terminalCommandArgException(sCommand, lsArguments, lsArguments[0], "Incorrect argument");
 				}
 			}
 			else {
 				SetTextColor(12);
 				cerr << "Too many arguments. Type \"HELP help\" for further information.\n" << endl;
+				logger.addEntry_terminalCommandException(sCommand, lsArguments, "Too many arguments");
 			}
 		}
 
 		else if (sCommand == "exit" || sCommand == "close") {
 			//Exit the application:
+			if (logEvents) {
+				//Logging beforehand:
+				logger.addEntry("Exit terminal.", LogEntryComponent::TERMINAL, LogEntryType::INF);
+				logger.addEntry("End session log.", LogEntryComponent::TERMINAL, LogEntryType::INF);
+				logger.close();
+			}
 			break;
 		}
 
@@ -462,6 +327,7 @@ int main() {
 					//Incorrect argument:
 					SetTextColor(12);
 					cerr << "The argument \"" << lsArguments[1] << "\" is incorrect. Type \"HELP execute\" for further information.\n" << endl;
+					logger.addEntry_terminalCommandArgException(sCommand, lsArguments, lsArguments[1], "Incorrect argument");
 					continue;
 				}
 			}
@@ -479,6 +345,7 @@ int main() {
 				//Error: too many arguments:
 				SetTextColor(12);
 				cerr << "Too many arguments. Type \"HELP execute\" for further information.\n" << endl;
+				logger.addEntry_terminalCommandException(sCommand, lsArguments, "Too many arguments");
 				continue;
 			}
 			//Execute code:
@@ -497,6 +364,7 @@ int main() {
 				//Error: Too many arguments:
 				SetTextColor(12);
 				cerr << "Too many arguments. Type \"HELP cd\" for further information.\n" << endl;
+				logger.addEntry_terminalCommandException(sCommand, lsArguments, "Too many arguments");
 				continue;
 			}
 			if (lsArguments.empty()) {
@@ -519,10 +387,76 @@ int main() {
 			}
 		}
 
+		else if (sCommand == "log") {
+			//Enable or disable the log:
+			if (lsArguments.empty()) {
+				//Show whether the logging is activated or deactivated:
+				if (logEvents) {
+					//Logging is activated:
+					SetTextColor(7);
+					cout << "The interpreter is logging to \"" << logger.getFilename() << "\".\n" << endl;
+				}
+				else {
+					//Logging is deactivated:
+					cout << "The interpreter is not logging.\n" << endl;
+				}
+			}
+			else if (lsArguments.size() == 1) {
+				//(De-)Activate logging:
+				string sArgument = lsArguments[0]; //Stores the argument.
+				for_each(sArgument.begin(), sArgument.end(), [](char& c) {c = ::tolower(c); }); //Convert argument to lowercase.
+				if (sArgument == "1" || sArgument == "true" || sArgument == "t") {
+					//Enable logging:
+					if (logEvents) {
+						//Interpreter was logging beforehand -> Just continue logging:
+						SetTextColor(7);
+						cout << "The interpreter is already logging to \"" << logger.getFilename() << "\".\n" << endl;
+					}
+					else {
+						//Enable logging:
+						logEvents = true;
+						logger.open(); //Begin logging.
+						SetTextColor(7);
+						cout << "The interpreter is now logging to \"" << logger.getFilename() << "\".\n" << endl;
+						logger.addEntry("Begin session log...", LogEntryComponent::TERMINAL, LogEntryType::INF);
+					}
+				}
+				else if (sArgument == "0" || sArgument == "false" || sArgument == "f") {
+					//Disable logging:
+					if (logEvents) {
+						//Interpreter was logging beforehand:
+						SetTextColor(7);
+						cout << "The interpreter has stopped logging. Find the previous log at \"" << logger.getFilename() << "\".\n" << endl;
+						logger.addEntry("End session log.", LogEntryComponent::TERMINAL, LogEntryType::INF);
+					}
+					else {
+						//Interpreter was not logging beforehand.
+						cout << "The interpreter is not logging.\n" << endl;
+					}
+					logEvents = false;
+					logger.close();
+				}
+				else {
+					//Incorrect argument passed:
+					SetTextColor(12);
+					cerr << "The argument \"" << lsArguments[0] << "\" is incorrect. Type \"HELP log\" for further information.\n" << endl;
+					logger.addEntry_terminalCommandArgException(sCommand, lsArguments, lsArguments[0], "Incorrect argument");
+					continue;
+				}
+			}
+			else {
+				//Incorrect number of arguments passed:
+				SetTextColor(12);
+				cerr << "Too many arguments. Type \"HELP log\" for further information.\n" << endl;
+				logger.addEntry_terminalCommandException(sCommand, lsArguments, "Too many arguments");
+			}
+		}
+
 		else {
 			//Incorrect command:
 			SetTextColor(12);
 			cerr << "The command \"" << sInput << "\" is incorrect. Type \"HELP\" for further information.\n" << endl;
+			logger.addEntry_terminalCommandException(sCommand, lsArguments, "Incorrect command");
 			continue;
 		}
 	}

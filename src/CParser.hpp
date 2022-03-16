@@ -172,6 +172,7 @@ public:
 	* @return				AST that was created with the passed list of tokens.
 	*/
 	CRV<CLinkedList<CAbstractSyntaxTree<CToken>>> parse(CLinkedList<CToken> plTokensObj) {
+		logger.addEntry("Begin syntactical analysis (Parser).", LogEntryComponent::PARSER, LogEntryType::INF);
 		lTokensObj.clear();
 		lTokensObj.addAll(plTokensObj);
 
@@ -180,15 +181,19 @@ public:
 			CToken firstToken = lTokensObj.retrieve(0); //Removes first token (Should be opened parenthesis).
 			if (firstToken.getType() != Token::PARENTHESES_OPENED) {
 				//First token is no opened parenthesis -> Syntax error:
+				logger.addEntry_tokenException(firstToken, LogEntryComponent::PARSER, LogEntryType::FATAL, Error::Parser::SYNTAX_P, Error::generateErrorMessage(Error::Parser::SYNTAX_P));
 				return CRV<CLinkedList<CAbstractSyntaxTree<CToken>>>(CLinkedList<CAbstractSyntaxTree<CToken>>(), Error::Parser::SYNTAX_P); //Return empty list.
 			}
 			CRV<CAbstractSyntaxTree<CToken>> rv_parseList = parseList(); //Parses the list.
 			if (rv_parseList.getErrorMessage() != Error::SUCCESS) {
 				//An error occured:
+				logger.addEntry_tokenException(rv_parseList.getContent().getContent(), LogEntryComponent::PARSER, LogEntryType::FATAL, rv_parseList.getErrorMessage(), Error::generateErrorMessage(rv_parseList.getErrorMessage()));
 				return CRV<CLinkedList<CAbstractSyntaxTree<CToken>>>(CLinkedList<CAbstractSyntaxTree<CToken>>(), rv_parseList.getErrorMessage());
 			}
 			lASTs.add(rv_parseList.getContent());
 		}
+
+		logger.addEntry("End syntactical analysis (Parser) successfully.", LogEntryComponent::PARSER, LogEntryType::INF);
 		return CRV<CLinkedList<CAbstractSyntaxTree<CToken>>>(lASTs, Error::SUCCESS); //Return every ast.
 	}
 };

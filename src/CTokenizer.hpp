@@ -14,6 +14,7 @@ REMARKS:	This file contains the class "CTokenizer", which is used to split up th
 #include "Variables/TokenTypes.hpp"
 #include "Variables/ErrorMessages.hpp"
 #include "Variables/KeywordTypes.hpp"
+#include "CLog.hpp"
 
 using namespace std;
 
@@ -63,10 +64,12 @@ private:
 		if (sSourceCode[0] == '(') {
 			//Found opened parenthesis:
 			lTokensObj.add(CToken(string(1, sSourceCode[0]), Token::PARENTHESES_OPENED, sFilename, nCurrentLine));
+			//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 		}
 		else if (sSourceCode[0] == ')') {
 			//Found closed parenthesis:
 			lTokensObj.add(CToken(string(1, sSourceCode[0]), Token::PARENTHESES_CLOSED, sFilename, nCurrentLine));
+			//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 		}
 		sSourceCode.erase(0, 1); //Remove the parenthesis.
 		return Error::SUCCESS;
@@ -93,16 +96,19 @@ private:
 		}
 		if (sString == Keyword::INT || sString == Keyword::DOUBLE || sString == Keyword::BOOL || sString == Keyword::CHAR || sString == Keyword::STRING || sString == Keyword::SET || sString == Keyword::DEFINE || sString == Keyword::IF || sString == Keyword::WHILE || sString == Keyword::PRINT || sString == Keyword::PRINTLN || sString == Keyword::RETURN) {
 			lTokensObj.add(CToken(sString, Token::KEYWORD, sFilename, nCurrentLine));
+			//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 		}
 		else {
 			string sCopyString = sString;
 			for_each(sCopyString.begin(), sCopyString.end(), [](char& c) {c = ::tolower(c); }); //Convert string to lowercase.
 			if (sCopyString == "t" || sCopyString == "nil") {
 				lTokensObj.add(CToken(sCopyString, Token::U_BOOL, sFilename, nCurrentLine));
+				//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 				sSourceCode.erase(0, sCopyString.length()); //Remove identifier / keyword from source code.
 				return Error::SUCCESS;
 			}
 			lTokensObj.add(CToken(sString, Token::IDENTIFIER, sFilename, nCurrentLine));
+			//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 		}
 		sSourceCode.erase(0, sString.length()); //Remove identifier / keyword from source code.
 		return Error::SUCCESS;
@@ -121,6 +127,7 @@ private:
 		if (sSourceCode[0] == '+' || sSourceCode[0] == '*' || sSourceCode[0] == '/') {
 			//Found arithmetic operator:
 			lTokensObj.add(CToken(string(1, sSourceCode[0]), Token::OPERATOR_ARITHMETIC, sFilename, nCurrentLine));
+			//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 			sSourceCode.erase(0, 1); //Remove arithmetic operator from sourcecode.
 		}
 		else if (sSourceCode[0] == '-') {
@@ -131,6 +138,7 @@ private:
 			else {
 				//Found arithmetic operator:
 				lTokensObj.add(CToken(string(1, sSourceCode[0]), Token::OPERATOR_ARITHMETIC, sFilename, nCurrentLine));
+				//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 				sSourceCode.erase(0, 1); //Remove arithmetic operator from sourcecode.
 			}
 		}
@@ -138,16 +146,19 @@ private:
 			if (sSourceCode.length() >= 2 && (sSourceCode[0] == '>' || sSourceCode[0] == '<') && sSourceCode[1] == '=') {
 				//Found relational operator >= or <=:
 				lTokensObj.add(CToken(string(1, sSourceCode[0]) + string(1, sSourceCode[1]), Token::OPERATOR_RELATIONAL, sFilename, nCurrentLine));
+				logger.addEntry_tokenizerAddToken(lTokensObj.back());
 				sSourceCode.erase(0, 2); //Remove relational operator from sourcecode.
 				return Error::SUCCESS;
 			}
 			//Found relational operator:
 			lTokensObj.add(CToken(string(1, sSourceCode[0]), Token::OPERATOR_RELATIONAL, sFilename, nCurrentLine));
+			//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 			sSourceCode.erase(0, 1); //Remove relational operator from sourcecode.
 		}
 		else if (sSourceCode[0] == '&' || sSourceCode[0] == '|') {
 			//Found boolean operator:
 			lTokensObj.add(CToken(string(1, sSourceCode[0]), Token::OPERATOR_BOOL, sFilename, nCurrentLine));
+			//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 			sSourceCode.erase(0, 1); //Remove boolean operator from sourcecode.
 		}
 		return Error::SUCCESS;
@@ -168,6 +179,7 @@ private:
 			//Found number:
 			string sDigitsOfNumber(1, sSourceCode[0]); //Stores the number as string.
 			bool bHasDecimalPoint = false; //Stores, wether the number has a decimal point.
+			bool incorrectNumber = false; //Indicates whether the number has too many decimal points.
 			//Get the rest of the number:
 			for (unsigned int i = 1; i < sSourceCode.length(); i++) {
 				char currentDecimal = sSourceCode[i];
@@ -177,7 +189,7 @@ private:
 				else if (currentDecimal == '.') {
 					if (bHasDecimalPoint) {
 						//ERROR: number already has a decimal point!
-						return Error::Tokenizer::TOO_MANY_DECIMALS;
+						incorrectNumber = true;
 					}
 					sDigitsOfNumber += currentDecimal;
 					bHasDecimalPoint = true;
@@ -188,9 +200,17 @@ private:
 			}
 			if (bHasDecimalPoint) {
 				lTokensObj.add(CToken(sDigitsOfNumber, Token::U_DOUBLE, sFilename, nCurrentLine));
+				if (incorrectNumber) {
+					return Error::Tokenizer::TOO_MANY_DECIMALS;
+				}
+				//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 			}
 			else {
 				lTokensObj.add(CToken(sDigitsOfNumber, Token::U_INT, sFilename, nCurrentLine));
+				if (incorrectNumber) {
+					return Error::Tokenizer::TOO_MANY_DECIMALS;
+				}
+				//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 			}
 			sSourceCode.erase(0, sDigitsOfNumber.length());
 		}
@@ -209,6 +229,7 @@ private:
 				sString += currentCharacter;
 			}
 			lTokensObj.add(CToken(sString, Token::U_STRING, sFilename, nCurrentLine));
+			//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 			sSourceCode.erase(0, sString.length()); //Remove String from sourcecode.
 		}
 
@@ -228,6 +249,7 @@ private:
 			}
 			sSourceCode.erase(0, 1); //Remove quotation marks.
 			lTokensObj.add(CToken(sCharacter, Token::U_CHAR, sFilename, nCurrentLine));
+			//logger.addEntry_tokenizerAddToken(lTokensObj.back());
 		}
 		return Error::SUCCESS;
 	}
@@ -255,6 +277,7 @@ public:
 	* @return				List of Tokens.
 	*/
 	CRV<CLinkedList<CToken>> tokenize(string psSourceCode, string psFilename) {
+		logger.addEntry("Begin lexical analysis (Tokenizer).", LogEntryComponent::TOKENIZER, LogEntryType::INF);
 		sFilename = psFilename;
 		sSourceCode = psSourceCode;
 		//transform(sSourceCode.begin(), sSourceCode.end(), sSourceCode.begin(), ::tolower); //Transform input to only include lowercase characters.
@@ -267,21 +290,24 @@ public:
 				//Found operator:
 				short int nErrorMessage = tokenizeOperator();
 				if (nErrorMessage != Error::SUCCESS) {
-					return CRV<CLinkedList<CToken>>(CLinkedList<CToken>(), nErrorMessage); //Returns an empty CLinkedList.
+					logger.addEntry_tokenException(lTokensObj.back(), LogEntryComponent::TOKENIZER, LogEntryType::FATAL, nErrorMessage, Error::generateErrorMessage(nErrorMessage));
+					return CRV<CLinkedList<CToken>>(lTokensObj, nErrorMessage);
 				}
 			}
 			else if (chCurrent == '(' || chCurrent == ')') {
 				//Found parenthesis:
 				short int nErrorMessage = tokenizeParenthesis();
 				if (nErrorMessage != Error::SUCCESS) {
-					return CRV<CLinkedList<CToken>>(CLinkedList<CToken>(), nErrorMessage); //Returns an empty CLinkedList.
+					logger.addEntry_tokenException(lTokensObj.back(), LogEntryComponent::TOKENIZER, LogEntryType::FATAL, nErrorMessage, Error::generateErrorMessage(nErrorMessage));
+					return CRV<CLinkedList<CToken>>(lTokensObj, nErrorMessage);
 				}
 			}
 			else if (isdigit(chCurrent) || chCurrent == '\"' || chCurrent == '\'') {
 				//Found atom:
 				short int nErrorMessage = tokenizeAtom();
 				if (nErrorMessage != Error::SUCCESS) {
-					return CRV<CLinkedList<CToken>>(CLinkedList<CToken>(), nErrorMessage); //Returns an empty CLinkedList.
+					logger.addEntry_tokenException(lTokensObj.back(), LogEntryComponent::TOKENIZER, LogEntryType::FATAL, nErrorMessage, Error::generateErrorMessage(nErrorMessage));
+					return CRV<CLinkedList<CToken>>(lTokensObj, nErrorMessage);
 				}
 			}
 			else if (chCurrent == ';') {
@@ -306,10 +332,12 @@ public:
 				//Something else (probably an identifier or keyword) found:
 				short int nErrorMessage = tokenizeIdentifierAndKeyword();
 				if (nErrorMessage != Error::SUCCESS) {
-					return CRV<CLinkedList<CToken>>(CLinkedList<CToken>(), nErrorMessage); //Returns an empty CLinkedList.
+					logger.addEntry_tokenException(lTokensObj.back(), LogEntryComponent::TOKENIZER, LogEntryType::FATAL, nErrorMessage, Error::generateErrorMessage(nErrorMessage));
+					return CRV<CLinkedList<CToken>>(lTokensObj, nErrorMessage);
 				}
 			}
 		}
+		logger.addEntry("End lexical analysis (Tokenizer) successfully.", LogEntryComponent::TOKENIZER, LogEntryType::INF);
 		return CRV<CLinkedList<CToken>>(lTokensObj, Error::SUCCESS);
 	}
 };

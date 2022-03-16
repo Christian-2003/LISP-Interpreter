@@ -176,4 +176,129 @@ namespace Error {
 		}
 		return Error::SUCCESS;
 	}
+
+
+
+	/**
+	* This function generates the error message based on the passed code.
+	* 
+	* @param _errorCode	Error code, which should be converted to an error message.
+	* @return			Error message.
+	*/
+	string generateErrorMessage(short int _errorCode) {
+		if (_errorCode == Error::SUCCESS || _errorCode == Error::Parser::EMPTY_AST_P) {
+			//No error occured:
+			return "Success";
+		}
+
+		//Generate error message:
+		switch (_errorCode) {
+		case Error::FileScanner::ERROR_FILESCANNER_FILE_DOES_NOT_EXIST:
+			return "The file does not exist.";
+		case Error::Tokenizer::TOO_MANY_DECIMALS:
+			return "The number has too many decimal points.";
+		case Error::Tokenizer::SOURCECODE_NOT_LONG_ENOUGH:
+			return "The sourcecode is not long enough.";
+		case Error::Tokenizer::EMPTY_CHARACTER_ENCOUNTERED:
+			return "Encountered char-type value with no content.";
+		case Error::Tokenizer::NO_EXIT_QUOTATION_MARK:
+			return "Missing quotation marks.";
+		case Error::Parser::SYNTAX_P:
+			return "Encountered syntax error while parsing.";
+		case Error::Parser::ATOM_CAN_NEVER_BE_PARENTHESES:
+			return "Encountered parentheses as atom.";
+		case Error::Interpreter::SYNTAX_I:
+			return "Encountered syntax error while interpreting.";
+		case Error::Interpreter::OPERANDS_ARE_OF_DIFFERENT_TYPE:
+			return "Encountered operands of different type, that are not compatible with each other.";
+		case Error::Interpreter::CANNOT_ADD_BOOLEANS:
+			return "Cannot add multiple boolean values.";
+		case Error::Interpreter::CANNOT_SUBTRACT_NON_NUMERIC_VALUES:
+			return "Cannot subtract multiple non-numeric values.";
+		case Error::Interpreter::CANNOT_MULTIPLY_NON_NUMERIC_VALUES:
+			return "Cannot multiply multiple non-numeric values.";
+		case Error::Interpreter::CANNOT_DIVIDE_NON_NUMERIC_VALUES:
+			return "Cannot divide multiple non-numeric values.";
+		case Error::Interpreter::CANNOT_DIVIDE_BY_ZERO:
+			return "Encountered division through zero.";
+		case Error::Interpreter::VARIABLE_DOES_NOT_EXIST:
+			return "Variable does not exist.";
+		case Error::Interpreter::VARIABLE_NAME_ALREADY_IN_USE:
+			return "Variable with this name is already in use.";
+		case Error::Interpreter::EMPTY_AST_I:
+			return "Encountered empty abstract syntax tree.";
+		case Error::Interpreter::MISSING_TOKEN:
+			return "Missing token.";
+		case Error::Interpreter::INCORRECT_TOKEN:
+			return "Encountered incorrect token.";
+		case Error::Interpreter::TOO_MANY_ARGUMENTS:
+			return "Too many arguments.";
+		case Error::Interpreter::NOT_ENOUGH_ARGUMENTS:
+			return "Not enough arguments.";
+		case Error::Interpreter::CANNOT_CONVERT_INT_TO_DOUBLE:
+			return "Cannot convert integer to double.";
+		case Error::Interpreter::CANNOT_CONVERT_INT_TO_BOOL:
+			return "Cannot convert integer to boolean.";
+		case Error::Interpreter::CANNOT_CONVERT_INT_TO_CHAR:
+			return "Cannot convert integer to character.";
+		case Error::Interpreter::CANNOT_CONVERT_INT_TO_STRING:
+			return "Cannot convert integer to string.";
+		case Error::Interpreter::CANNOT_CONVERT_DOUBLE_TO_INT:
+			return "Cannot convert double to integer.";
+		case Error::Interpreter::CANNOT_CONVERT_DOUBLE_TO_BOOL:
+			return "Cannot convert double to boolean.";
+		case Error::Interpreter::CANNOT_CONVERT_DOUBLE_TO_CHAR:
+			return "Cannot convert double to character.";
+		case Error::Interpreter::CANNOT_CONVERT_DOUBLE_TO_STRING:
+			return "Cannot convert double to string.";
+		case Error::Interpreter::CANNOT_CONVERT_BOOL_TO_INT:
+			return "Cannot convert boolean to integer.";
+		case Error::Interpreter::CANNOT_CONVERT_BOOL_TO_DOUBLE:
+			return "Cannot convert boolean to double.";
+		case Error::Interpreter::CANNOT_CONVERT_BOOL_TO_CHAR:
+			return "Cannot convert boolean to character.";
+		case Error::Interpreter::CANNOT_CONVERT_BOOL_TO_STRING:
+			return "Cannot convert boolean to string.";
+		case Error::Interpreter::CANNOT_CONVERT_CHAR_TO_INT:
+			return "Cannot convert character to integer.";
+		case Error::Interpreter::CANNOT_CONVERT_CHAR_TO_DOUBLE:
+			return "Cannot convert character to double.";
+		case Error::Interpreter::CANNOT_CONVERT_CHAR_TO_BOOL:
+			return "Cannot convert character to boolean.";
+		case Error::Interpreter::CANNOT_CONVERT_CHAR_TO_STRING:
+			return "Cannot convert character to string.";
+		case Error::Interpreter::CANNOT_CONVERT_STRING_TO_INT:
+			return "Cannot convert string to integer.";
+		case Error::Interpreter::CANNOT_CONVERT_STRING_TO_DOUBLE:
+			return "Cannot convert string to double.";
+		case Error::Interpreter::CANNOT_CONVERT_STRING_TO_BOOL:
+			return "Cannot convert string to boolean.";
+		case Error::Interpreter::CANNOT_CONVERT_STRING_TO_CHAR:
+			return "Cannot convert string to character.";
+		case Error::Interpreter::MISSING_CONDITION:
+			return "Missing condition of statement.";
+		case Error::Interpreter::MISSING_BODY:
+			return "Missing body of statement.";
+		case Error::Interpreter::INCORRECT_FUNCTION_DEFINITION:
+			return "Incorrect function definition.";
+		case Error::Interpreter::FUNCTION_NAME_IS_INCORRECT:
+			return "Incorrect function name.";
+		case Error::Interpreter::MISSING_MAIN_FUNCTION:
+			return "LISP main-function is missing.";
+		case Error::Interpreter::MAIN_FUNCTION_HAS_PARAMETERS:
+			return "LISP main-function has too many parameters.";
+		case Error::Interpreter::MAIN_FUNCTION_HAS_INCORRECT_RETURN_TYPE:
+			return "LISP main-function has incorrect return type.";
+		case Error::Interpreter::MISSING_FUNCTION_EXPRESSION:
+			return "Function has no expressions.";
+		case Error::Interpreter::FUNCTION_DOES_NOT_EXIST:
+			return "The called function does not exist.";
+		case Error::Interpreter::INCORRECT_NUMBER_OF_ARGUMENTS_PASSED:
+			return "An incorrect number of arguments is passed.";
+		case Error::Interpreter::TOO_MANY_VALUES_TO_RETURN:
+			return "LISP function can only return up to exactly one argument.";
+		default:
+			return "Encountered unknown error.";
+		}
+	}
 }

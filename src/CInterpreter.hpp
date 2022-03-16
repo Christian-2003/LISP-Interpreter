@@ -114,6 +114,7 @@ public:
 	* @return			Error message.
 	*/
 	CRV<CToken> interpret(CLinkedList<CAbstractSyntaxTree<CToken>> pltASTs) {
+		logger.addEntry("Begin code execution (Interpreter).", LogEntryComponent::INTERPRETER, LogEntryType::INF);
 		//Each passed abstract syntax tree resembles a function:
 		for (unsigned int i = 0; i < pltASTs.size(); i++) {
 			//Add every function to the list of functions:
@@ -132,10 +133,12 @@ public:
 				//Found main function:
 				if (lFunctions[i].getParameterAmount() != 0) {
 					//The function has too many parameters:
+					logger.addEntry(Error::generateErrorMessage(Error::Interpreter::MAIN_FUNCTION_HAS_PARAMETERS), LogEntryComponent::INTERPRETER, LogEntryType::FATAL);
 					return CRV<CToken>(CToken(), Error::Interpreter::MAIN_FUNCTION_HAS_PARAMETERS);
 				}
 				else if (lFunctions[i].getReturnType() != Token::U_VOID) {
 					//The function does not have "void" as return type:
+					logger.addEntry(Error::generateErrorMessage(Error::Interpreter::MAIN_FUNCTION_HAS_INCORRECT_RETURN_TYPE), LogEntryComponent::INTERPRETER, LogEntryType::FATAL);
 					return CRV<CToken>(CToken(), Error::Interpreter::MAIN_FUNCTION_HAS_INCORRECT_RETURN_TYPE);
 				}
 				//Interpret each expression from the Lisp main-function:
@@ -145,15 +148,18 @@ public:
 					CRV<CToken> rvEval = interpretExpression(ltMainExpressions[j]); //Interprets the current expression.
 					if (rvEval.getErrorMessage() != Error::SUCCESS) {
 						//An error occured:
+						logger.addEntry_tokenException(rvEval.getContent(), LogEntryComponent::INTERPRETER, LogEntryType::FATAL, rvEval.getErrorMessage(), Error::generateErrorMessage(rvEval.getErrorMessage()));
 						return rvEval;
 					}
 				}
 
 				//Every expression was successfully interpreted:
+				logger.addEntry("End code execution (Interpreter) successfully.", LogEntryComponent::INTERPRETER, LogEntryType::INF);
 				return CRV<CToken>(CToken(), Error::SUCCESS);
 			}
 		}
 		//Main function does not exist:
+		logger.addEntry(Error::generateErrorMessage(Error::Interpreter::MISSING_MAIN_FUNCTION), LogEntryComponent::INTERPRETER, LogEntryType::FATAL);
 		return CRV<CToken>(CToken(), Error::Interpreter::MISSING_MAIN_FUNCTION);
 	}
 

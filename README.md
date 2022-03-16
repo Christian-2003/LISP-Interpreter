@@ -34,7 +34,7 @@ Unlike you might thing, Lisp is no programming language, but rather a collection
 
 ***
 
-### System requirements: <a nem="requirements"></a>
+### System requirements: <a name="requirements"></a>
 
 In order for the interpreter to run on your system, you need to have at least **Windows 10** installed.
 
