@@ -1,4 +1,4 @@
-# LISP Interpreter ![Code size](https://img.shields.io/github/languages/code-size/Christian-2003/LISP-Interpreter) ![Version](https://img.shields.io/github/manifest-json/v/Christian-2003/LISP-Interpreter?color=green) ![License](https://img.shields.io/badge/License-MIT-red.svg)
+# LISP Interpreter ![Code size](https://img.shields.io/github/languages/code-size/Christian-2003/LISP-Interpreter) ![Version](https://img.shields.io/github/manifest-json/v/Christian-2003/LISP-Interpreter?color=green) ![License](https://img.shields.io/badge/License-MIT-red.svg) [![3][3]][5]
 
 ![](https://github.com/Christian-2003/LISP-Interpreter/blob/main/Resources/Preview.png?raw=true)
 
@@ -141,3 +141,6 @@ If you find any bugs or errors while playing with the interpreter, please create
 
 ## License: <a name="license"></a>
 The interpreter is licensed under the **MIT License**. See the full license [here](https://github.com/Christian-2003/LISP-Interpreter/blob/main/LICENSE.txt).
+
+[3]: https://img.shields.io/badge/code_quality-F-red
+[5]: https://git.io/code-quality
